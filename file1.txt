@@ -1,1 +1,1 @@
-This is a conflicting line of file1.txt from the main branch
+This is a conflicting line of file1.txt from the feature branch
