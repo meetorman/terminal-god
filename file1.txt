@@ -1,3 +1,3 @@
--e Line 1 of file1.txt
+-e Modified Line 1 of file1.txt (feature)
 Line 2 of file1.txt
-Line 3 of file1.txt
+Modified Line 3 of file1.txt (feature)
