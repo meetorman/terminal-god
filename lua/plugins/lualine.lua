@@ -1,3 +1,14 @@
+local function get_neotree_info()
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        local ft = vim.api.nvim_buf_get_option(buf, 'filetype')
+        if ft == 'neo-tree' then
+            return true, vim.api.nvim_win_get_width(win)
+        end
+    end
+    return false, 0
+end
+
 local old = {
     "nvim-lualine/lualine.nvim",
     config = function()
@@ -8,7 +19,6 @@ local old = {
         })
     end
 }
-
 
 return {
     'nvim-lualine/lualine.nvim',
@@ -76,8 +86,18 @@ return {
         }
 
         local buffer = {
-            require 'tabline'.tabline_buffers,
-            separator = { left = "", right = "" },
+            function()
+                local is_neotree_open, neotree_width = get_neotree_info()
+                if is_neotree_open then
+                    local padding = string.rep(' ', math.floor(neotree_width / 2) - 4)
+                    local explorer_text = padding .. "Explorer" .. padding
+                    local remaining_padding = string.rep(' ', neotree_width - #explorer_text)
+                    return "%#NeoTreeNormal#" .. explorer_text .. remaining_padding .. "%#Normal#" .. require('tabline').tabline_buffers()
+                else
+                    return require('tabline').tabline_buffers()
+                end
+            end,
+            separator = { left = "", right = "" },
         }
 
         local tabs = {
@@ -182,17 +202,13 @@ return {
 
             sections = {
                 lualine_a = {
-                    --{ 'mode', fmt = function(str) return str:gsub(str, "  ") end },
                     modes,
                     vim_icons,
-                    --{ 'mode', fmt = function(str) return str:sub(1, 1) end },
                 },
                 lualine_b = {
                     space,
-
                 },
                 lualine_c = {
-
                     filename,
                     filetype,
                     space,
@@ -224,8 +240,7 @@ return {
                 lualine_a = {
                     buffer,
                 },
-                lualine_b = {
-                },
+                lualine_b = {},
                 lualine_c = {},
                 lualine_x = {
                     tabs,
@@ -264,17 +279,13 @@ return {
 
             sections = {
                 lualine_a = {
-                    --{ 'mode', fmt = function(str) return str:gsub(str, "  ") end },
                     modes,
                     vim_icons,
-                    --{ 'mode', fmt = function(str) return str:sub(1, 1) end },
                 },
                 lualine_b = {
                     space,
-
                 },
                 lualine_c = {
-
                     filename,
                     filetype,
                     space,
@@ -306,8 +317,7 @@ return {
                 lualine_a = {
                     buffer,
                 },
-                lualine_b = {
-                },
+                lualine_b = {},
                 lualine_c = {},
                 lualine_x = {
                     tabs,
@@ -322,5 +332,13 @@ return {
             inactive_winbar = {},
 
         }
+
+        -- Add this inside the config function
+        vim.cmd([[
+            augroup LualineCustom
+                autocmd!
+                autocmd ColorScheme * highlight NeoTreeNormal guibg=#1e1e2e guifg=#cdd6f4
+            augroup END
+        ]])
     end
 }

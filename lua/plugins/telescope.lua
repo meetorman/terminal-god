@@ -51,6 +51,32 @@ return {
             -- map("n", "<leader>fd", require("telescope.builtin").diagnostics, "Diagnostics")
 
             -- map("n", "<C-p>", require("telescope.builtin").keymaps, "Search keymaps")
+
+            local actions = require("telescope.actions")
+            local action_state = require("telescope.actions.state")
+
+            require("telescope").setup({
+                pickers = {
+                    buffers = {
+                        attach_mappings = function(prompt_bufnr, map)
+                            local delete_buf = function()
+                                local selection = action_state.get_selected_entry()
+                                actions.close(prompt_bufnr)
+                                vim.api.nvim_buf_delete(selection.bufnr, { force = true })
+                                -- Reopen the buffer picker
+                                require('telescope.builtin').buffers()
+                            end
+
+                            -- Map Ctrl-u to delete the selected buffer
+                            map('i', '<c-x>', delete_buf)
+                            map('n', 'x', delete_buf)
+
+                            -- Return true to keep default mappings
+                            return true
+                        end,
+                    },
+                },
+            })
         end,
     },
     {
