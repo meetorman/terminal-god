@@ -100,7 +100,7 @@ wk.add({
   { "<leader>lr", vim.lsp.buf.references, mode = "n", desc = "References", icon = "" },
   { "<leader>lh", vim.lsp.buf.hover, mode = "n", desc = "Hover", icon = "" },
   -- ... (keep your other existing mappings)
-  { "<leader>z", "z", mode = "n", desc = "Z commands" },
+  { "<leader>g", "<cmd>Neogit<cr>", mode = "n", desc = "Git", icon="" },
 })
 
 
