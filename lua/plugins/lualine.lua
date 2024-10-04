@@ -23,7 +23,7 @@ local old = {
 return {
     'nvim-lualine/lualine.nvim',
     dependencies = {
-        'kdheepak/tabline.nvim',
+        'nvim-tree/nvim-web-devicons',
     },
     config = function()
         local colors = {
@@ -85,25 +85,9 @@ return {
             color = { bg = "#313244" },
         }
 
-        local buffer = {
-            function()
-                local is_neotree_open, neotree_width = get_neotree_info()
-                if is_neotree_open then
-                    local padding = string.rep(' ', math.floor(neotree_width / 2) - 4)
-                    local explorer_text = padding .. "Explorer" .. padding
-                    local remaining_padding = string.rep(' ', neotree_width - #explorer_text)
-                    return "%#NeoTreeNormal#" .. explorer_text .. remaining_padding .. "%#Normal#" .. require('tabline').tabline_buffers()
-                else
-                    return require('tabline').tabline_buffers()
-                end
-            end,
-            separator = { left = "", right = "" },
-        }
+        local buffer = {}
 
-        local tabs = {
-            require 'tabline'.tabline_tabs,
-            separator = { left = "", right = "" },
-        }
+        local tabs = {}
 
         local fileformat = {
             'fileformat',
@@ -236,104 +220,28 @@ return {
                 lualine_y = {},
                 lualine_z = {}
             },
-            tabline = {
-                lualine_a = {
-                    buffer,
-                },
-                lualine_b = {},
-                lualine_c = {},
-                lualine_x = {
-                    tabs,
-                },
-                lualine_y = {
-                    space,
-                },
-                lualine_z = {
-                },
-            },
+            -- Remove the tabline configuration
+            -- tabline = {
+            --     lualine_a = {
+            --         buffer,
+            --     },
+            --     lualine_b = {},
+            --     lualine_c = {},
+            --     lualine_x = {
+            --         tabs,
+            --     },
+            --     lualine_y = {
+            --         space,
+            --     },
+            --     lualine_z = {
+            --     },
+            -- },
             winbar = {},
             inactive_winbar = {},
 
         }
 
-        require('lualine').setup {
-
-            options = {
-                icons_enabled = true,
-                theme = theme,
-                component_separators = { left = '', right = '' },
-                section_separators = { left = '', right = '' },
-                disabled_filetypes = {
-                    statusline = {},
-                    winbar = {},
-                },
-                ignore_focus = {},
-                always_divide_middle = true,
-                globalstatus = true,
-                refresh = {
-                    statusline = 1000,
-                    tabline = 1000,
-                    winbar = 1000,
-                }
-            },
-
-            sections = {
-                lualine_a = {
-                    modes,
-                    vim_icons,
-                },
-                lualine_b = {
-                    space,
-                },
-                lualine_c = {
-                    filename,
-                    filetype,
-                    space,
-                    branch,
-                    diff,
-                },
-                lualine_x = {
-                    space,
-                },
-                lualine_y = {
-                    encoding,
-                    fileformat,
-                    space,
-                },
-                lualine_z = {
-                    dia,
-                    lsp,
-                }
-            },
-            inactive_sections = {
-                lualine_a = {},
-                lualine_b = {},
-                lualine_c = { 'filename' },
-                lualine_x = { 'location' },
-                lualine_y = {},
-                lualine_z = {}
-            },
-            tabline = {
-                lualine_a = {
-                    buffer,
-                },
-                lualine_b = {},
-                lualine_c = {},
-                lualine_x = {
-                    tabs,
-                },
-                lualine_y = {
-                    space,
-                },
-                lualine_z = {
-                },
-            },
-            winbar = {},
-            inactive_winbar = {},
-
-        }
-
-        -- Add this inside the config function
+        -- Keep your custom highlight group
         vim.cmd([[
             augroup LualineCustom
                 autocmd!

@@ -1,5 +1,9 @@
 return {
     "folke/noice.nvim",
+    dependencies = {
+        "MunifTanjim/nui.nvim",
+        "rcarriga/nvim-notify",
+    },
     opts = function(_, opts)
         opts.routes = opts.routes or {}
         table.insert(opts.routes, {
@@ -48,7 +52,20 @@ return {
             end,
         })
 
-        opts.presets = opts.presets or {}
-        opts.presets.lsp_doc_border = true
+        opts.presets = {
+            bottom_search = true,
+            command_palette = true,
+            long_message_to_split = true,
+            inc_rename = false,
+            lsp_doc_border = true
+        }
+
+        -- Ensure Noice doesn't override notify
+        opts.notify = {
+            enabled = true,
+            view = "notify",
+        }
+
+        return opts
     end,
 }

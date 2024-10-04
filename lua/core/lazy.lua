@@ -25,3 +25,8 @@ require("helpers.keys").set_leader(" ")
 -- (The leader key must be set before this)
 lazy.setup("plugins")
 
+-- Add auto-command to reload dashboard on configuration file changes
+vim.api.nvim_create_autocmd("BufWritePost", {
+	pattern = { "*/nvim/*.lua" },
+	command = "source <afile> | DashboardReload",
+})
