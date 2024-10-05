@@ -1,3 +1,36 @@
+# Table of Contents
+
+- [Installation](#installation)
+  - [Install dependencies](#install-dependencies)
+  - [Clone repo and install plugins](#clone-repo-and-install-plugins)
+- [Usage](#usage)
+- [Key Bindings](#key-bindings)
+  - [tmux](#tmux)
+    - [Windows](#windows)
+    - [Panes](#panes)
+  - [nvim](#nvim)
+    - [Windows](#windows-1)
+- [Plugins](#plugins)
+  - [which-key](#which-key)
+  - [telescope](#telescope)
+  - [neotree](#neotree)
+  - [notify](#notify)
+  - [lualine](#lualine)
+  - [chatgpt](#chatgpt)
+  - [neogit](#neogit)
+  - [lazygit](#lazygit)
+  - [undo tree](#undo-tree)
+  - [Autocompletion](#autocompletion)
+    - [CoPilot](#copilot)
+    - [COC](#coc)
+- [Vim Motions](#vim-motions)
+  - [Basic Motions](#basic-motions)
+  - [Text Objects](#text-objects)
+  - [Operators](#operators)
+  - [Combining Operators and Motions](#combining-operators-and-motions)
+  - [Advanced Motions](#advanced-motions)
+  - [Repeating and Undoing](#repeating-and-undoing)
+
 # Installation
 
 ### Install dependencies
