@@ -130,16 +130,23 @@ For editing, chatting, and explaining
 ![](./readme/neogit.png)
 For quick git operations
 - Neogit menu: `<space>g`
-  - Git stage: `<space>gs`
-  - Git commit: `<space>gc`
-  - Git push: `<space>gP`
-  - Git diff: `<space>gd`
-  - Git blame: `<space>gb`
+  - Git stage: `s`
+  - Git commit: `cc`
+  - Git push: `Pp`
+  - Git diff: `d`
+![](./readme/neogit-help.png)
 
 ### lazygit
 ![](./readme/lazygit.png)
 For more complex git operations (merging conflicts, squashing, etc.)
 - Usage: `:LazyGit`
+
+### undo tree
+![](./readme/undotree.png)
+
+For viewing undo history
+- Undo-tree menu: `<space>u`
+  - Help: `?`
 
 ### Autocompletion
 #### CoPilot
