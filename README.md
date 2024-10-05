@@ -31,8 +31,8 @@ nvim
 `ctrl + b` `2` # Create new pane in bottom
 
 `ctrl + b` `o` # Switch back to nvim
-
-
+ <br/>
+ <br/>
 # Key Bindings
 
 ## tmux
@@ -161,3 +161,63 @@ For viewing undo history
 #### COC
 <img src="./readme/coc.png" alt="COC" width="300">
 
+ <br/>
+
+# Vim Motions
+
+Vim motions are commands used to navigate and manipulate text efficiently. They are a fundamental part of Vim's modal editing philosophy.
+
+### Basic Motions
+
+- `h`, `j`, `k`, `l`: Move left, down, up, right
+- `w`: Move to the beginning of the next word
+- `b`: Move to the beginning of the previous word
+- `e`: Move to the end of the current/next word
+- `0`: Move to the beginning of the line
+- `$`: Move to the end of the line
+- `gg`: Go to the first line of the document
+- `G`: Go to the last line of the document
+
+### Text Objects
+
+Vim allows you to operate on "text objects" such as words, sentences, and paragraphs.
+
+- `iw`: "inner word"
+- `aw`: "a word" (includes surrounding space)
+- `is`: "inner sentence"
+- `as`: "a sentence"
+- `ip`: "inner paragraph"
+- `ap`: "a paragraph"
+
+### Operators
+
+Operators are commands that perform actions on text objects or motions.
+
+- `d`: Delete
+- `c`: Change (delete and enter insert mode)
+- `y`: Yank (copy)
+- `>`: Indent
+- `<`: Unindent
+
+### Combining Operators and Motions
+
+The power of Vim comes from combining operators with motions or text objects. For example:
+
+- `dw`: Delete word
+- `ci"`: Change inside quotes
+- `ya{`: Yank around curly braces
+- `>ip`: Indent paragraph
+
+### Advanced Motions
+
+- `f{char}`: Move to the next occurrence of {char} on the current line
+- `F{char}`: Move to the previous occurrence of {char} on the current line
+- `t{char}`: Move to just before the next occurrence of {char}
+- `T{char}`: Move to just after the previous occurrence of {char}
+- `%`: Move to the matching parenthesis, bracket, or brace
+
+### Repeating and Undoing
+
+- `.`: Repeat the last change
+- `u`: Undo the last change
+- `Ctrl + r`: Redo the last undone change
