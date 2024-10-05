@@ -113,10 +113,10 @@ Prefix: `Ctrl + w`
 
 ### which-key
 Provides menu for key binding reminders
-#### Windows `ctrl + w`
-![](./readme/which-key-windows.png)
 #### Leader `<space>`
 ![](./readme/which-key-leader.png)
+#### Windows `ctrl + w`
+![](./readme/which-key-windows.png)
 #### Miscellaneous `k`
 ![](./readme/which-key-z.png)
 
