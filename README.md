@@ -87,7 +87,8 @@ Provides menu for key binding reminders
 ![](./readme/which-key-z.png)
 
 ### telescope
-![](./readme/telescope.png)
+<img src="./readme/telescope.png" alt="Telescope" width="400">
+
 UI for searching files, git files, projects, grep, etc
 - Find files: `<space>ff`
 - Find git files: `<space>fg`
@@ -101,24 +102,27 @@ UI for searching files, git files, projects, grep, etc
 - Find: `<space>fm`
 
 ### neotree
-![](./readme/neotree.png)
+<img src="./readme/neotree.png" alt="Neotree" width="300">
 
 Explorer - File browser
 - Toggle Explorer: `<space>e`
 
 ### notify
 ![](./readme/notify.png)
+
 Display background terminal output in a notification, allows plugins to send notifications
 - Usage: `:Notify "message"`
 
 ### lualine
 ![](./readme/lualine-top.png)
 ![](./readme/lualine-bottom.png)
+
 Handles top and bottom bar of nvim
 - bufferline: Handles the tabs at the top
 
 ### chatgpt
-![](./readme/chatgpt.png)
+<img src="./readme/chatgpt.png" alt="ChatGPT" width="400">
+
 For editing, chatting, and explaining
 - AI menu: `<space>a`
   - ChatGPT menu: `<space>ag`
@@ -127,7 +131,8 @@ For editing, chatting, and explaining
     - Chat: `<space>agc`
 
 ### neogit
-![](./readme/neogit.png)
+<img src="./readme/neogit.png" alt="Neogit" width="400">
+
 For quick git operations
 - Neogit menu: `<space>g`
   - Git stage: `s`
@@ -143,7 +148,7 @@ For more complex git operations (merging conflicts, squashing, etc.)
 - Usage: `:LazyGit`
 
 ### undo tree
-![](./readme/undotree.png){width=50%}
+<img src="./readme/undotree.png" alt="Undotree" width="300">
 
 For viewing undo history
 - Undo-tree menu: `<space>u`
@@ -153,5 +158,5 @@ For viewing undo history
 #### CoPilot
 - Cycle through suggestions: `Ctrl + n`, `Ctrl + p`
 #### COC
-![](./readme/coc.png)
+<img src="./readme/coc.png" alt="COC" width="300">
 
