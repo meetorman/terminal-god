@@ -118,9 +118,19 @@ return {
                     highlight = "NeoTreeModified",
                 },
                 name = {
-                    trailing_slash = true,
+                    trailing_slash = false,
                     use_git_status_colors = true,
                     highlight = "NeoTreeFileName",
+                    -- Add this function to modify how the path is displayed
+                    get_label = function(config, node, state)
+                        if node.type == "directory" then
+                            -- Get the last part of the path (parent folder name)
+                            local path = node.name
+                            local parts = vim.split(path, "/", { plain = true })
+                            return parts[#parts] .. "/"
+                        end
+                        return node.name
+                    end
                 },
                 git_status = {
                     symbols = {
