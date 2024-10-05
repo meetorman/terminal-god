@@ -1,11 +1,46 @@
+# Installation
+
+### Install dependencies
+``` brew install tmux ```
+
+``` brew install neovim ```
+
+To avoid Lazyvim warnings install lua 5.1.5 from source
+```
+   wget https://www.lua.org/ftp/lua-5.1.5.tar.gz
+   tar zxf lua-5.1.5.tar.gz
+   cd lua-5.1.5
+   make macosx
+   sudo make install
+```
+
+# Usage
+
+```
+tmux
+tmux source-file ~/.tmux.conf # Reload config
+nvim
+```
+`ctrl + b` `2` # Create new pane in bottom
+
+`ctrl + b` `o` # Switch back to nvim
+
+
+### Clone repo and install plugins
+```
+git clone git@github.com:meetorman/terminal-god.git
+mv terminal-god/.tmux.conf ~/.tmux.conf
+mv terminal-god/.config/nvim ~/.config/nvim
+```
+
 # Key Bindings
 
 ## tmux
 
-Prefix: `Ctrl + b`
-
 ### Windows
 ![](./readme/tmux-windows.png)
+
+Prefix: `Ctrl + b`
 - New window: `c`
 - Switch window: `n`
 - List windows: `w`
@@ -80,7 +115,7 @@ For editing, chatting, and explaining
 
 ### neogit
 ![](./readme/neogit.png)
-Git integration
+For quick git operations
 - Neogit menu: `<space>g`
   - Git status: `<space>gs`
   - Git commit: `<space>gc`
@@ -90,13 +125,14 @@ Git integration
 
 ### lazygit
 ![](./readme/lazygit.png)
-For complex git operations (merging conflicts, squashing, etc.)
+For more complex git operations (merging conflicts, squashing, etc.)
 - Usage: `:LazyGit`
 
-### coc and copilot
-Autocompletion
+### Autocompletion
+#### CoPilot
 - Cycle through suggestions: `Ctrl + n`, `Ctrl + p`
-
+#### COC
+![](./readme/coc.png)
 ### which-key
 Provides menu for key binding reminders
 #### Windows
