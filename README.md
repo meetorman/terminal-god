@@ -143,7 +143,7 @@ For more complex git operations (merging conflicts, squashing, etc.)
 - Usage: `:LazyGit`
 
 ### undo tree
-![](./readme/undotree.png)
+![](./readme/undotree.png){width=50%}
 
 For viewing undo history
 - Undo-tree menu: `<space>u`
