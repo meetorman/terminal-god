@@ -44,6 +44,7 @@ Prefix: `Ctrl + b`
 - New window: `c`
 - Switch window: `n`
 - List windows: `w`
+- Rename window: `,`
 
 ### Panes
 ![](./readme/tmux-panes.png)
