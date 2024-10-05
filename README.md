@@ -3,8 +3,6 @@
 # Table of Contents
 
 - [Installation](#installation)
-  - [Install dependencies](#install-dependencies)
-  - [Clone repo and install plugins](#clone-repo-and-install-plugins)
 - [Usage](#usage)
 - [Key Bindings](#key-bindings)
   - [tmux](#tmux)
