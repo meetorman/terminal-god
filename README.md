@@ -14,6 +14,13 @@ To avoid Lazyvim warnings install lua 5.1.5 from source
    sudo make install
 ```
 
+### Clone repo and install plugins
+```
+git clone git@github.com:meetorman/terminal-god.git
+mv terminal-god/.tmux.conf ~/.tmux.conf
+mv terminal-god/.config/nvim ~/.config/nvim
+```
+
 # Usage
 
 ```
@@ -25,13 +32,6 @@ nvim
 
 `ctrl + b` `o` # Switch back to nvim
 
-
-### Clone repo and install plugins
-```
-git clone git@github.com:meetorman/terminal-god.git
-mv terminal-god/.tmux.conf ~/.tmux.conf
-mv terminal-god/.config/nvim ~/.config/nvim
-```
 
 # Key Bindings
 
