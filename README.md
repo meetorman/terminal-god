@@ -1,78 +1,107 @@
-Keys:
+# Key Bindings
 
-# tmux 
-tmux: ctrl + b
-## Windows
- - new window: c
- - switch window: n
- - list windows: w
-## Panes
- - new pane (natural numpad direction, like with mirrors):
-    1: bottom left
-    2: bottom (horizontal)
-    3: bottom right
-    4: left (vertical)
-    
-    6: right (vertical)
-    7: top left
-    8: top (horizontal)
-    9: top right
-Resize pane: shift plus arrow key
+## tmux
 
-# nvim
-<leader>: " "
-The leader key is the key that is used to trigger  in nvim. It is set to space.
+Prefix: `Ctrl + b`
 
-nvim windows: ctrl + w
- - split horizontally: s
- - split vertically: v
- - close window: q
- - move to window: h, j, k, l
- - resize window: +, -
+### Windows
+![](./readme/tmux-windows.png)
+- New window: `c`
+- Switch window: `n`
+- List windows: `w`
 
+### Panes
+![](./readme/tmux-panes.png)
+New pane (numpad direction):
+- `1`: bottom left
+- `2`: bottom (horizontal)
+- `3`: bottom right
+- `4`: left (vertical)
+- `6`: right (vertical)
+- `7`: top left
+- `8`: top (horizontal)
+- `9`: top right
 
-Plugins:
-telescope: handles file search, git files, etc.
-    - <space>ff: find files
-    - <space>fg: find git files
-    - <space>fb: find buffers
-    - <space>fh: find help tags
-    - <space>fl: find live grep
-    - <space>ft: find tags
-    - <space>fr: find recent files
-    - <space>fw: find word
-    - <space>fc: find commands
-    - <space>fm: find
+Resize pane: `Shift + Arrow key`
 
-neotree: file browser
-    - <space>e: toggle Explorer
+## nvim
 
-notify: for displaying terminal output in a notification
-    - :Notify "message"
+Leader key: `Space`
 
-lualine: handles top and bottom bar of nvim
-    -  bufferline: handles the tabs at the top
+### Windows
+![](./readme/nvim-windows.png)
+Prefix: `Ctrl + w`
+- Split horizontally: `s`
+- Split vertically: `v`
+- Close window: `q`
+- Move to window: `h`, `j`, `k`, `l`
+- Resize window: `+`, `-`
 
-chatgpt: for editing, chatting, and explaining
-    - <space>a: for ai menu
-        - <space>ag: for chatgpt menu
-            - <space>age: for chatgpt edit
-            - <space>agd: for chatgpt explain
-            - <space>agc: for chatgpt chat
+## Plugins
 
-neogit: for git integration
-    - <space>g: for neogit
-        - <space>gs: for git status
-        - <space>gc: for git commit
-        - <space>gp: for git push
-        - <space>gd: for git diff
-        - <space>gb: for git blame
+### telescope
+![](./readme/telescope.png)
+File search, git files, etc.
+- Find files: `<space>ff`
+- Find git files: `<space>fg`
+- Find buffers: `<space>fb`
+- Find help tags: `<space>fh`
+- Find live grep: `<space>fl`
+- Find tags: `<space>ft`
+- Find recent files: `<space>fr`
+- Find word: `<space>fw`
+- Find commands: `<space>fc`
+- Find: `<space>fm`
 
-lazygit: for more complex git operations, like mergin conflicts, squashing, etc.
-    - :LazyGit
+### neotree
+![](./readme/neotree.png)
+File browser
+- Toggle Explorer: `<space>e`
 
-coc: for autocompletion
-copilot: for autocompletion
-    cycle through suggestions: ctrl + n, ctrl + p
- 
+### notify
+![](./readme/notify.png)
+Display background terminal output in a notification, allows plugins to send notifications
+- Usage: `:Notify "message"`
 
+### lualine
+![](./readme/lualine-top.png)
+![](./readme/lualine-bottom.png)
+Handles top and bottom bar of nvim
+- bufferline: Handles the tabs at the top
+
+### chatgpt
+![](./readme/chatgpt.png)
+For editing, chatting, and explaining
+- AI menu: `<space>a`
+  - ChatGPT menu: `<space>ag`
+    - Edit: `<space>age`
+    - Explain: `<space>agd`
+    - Chat: `<space>agc`
+
+### neogit
+![](./readme/neogit.png)
+Git integration
+- Neogit menu: `<space>g`
+  - Git status: `<space>gs`
+  - Git commit: `<space>gc`
+  - Git push: `<space>gp`
+  - Git diff: `<space>gd`
+  - Git blame: `<space>gb`
+
+### lazygit
+![](./readme/lazygit.png)
+For complex git operations (merging conflicts, squashing, etc.)
+- Usage: `:LazyGit`
+
+### coc and copilot
+Autocompletion
+- Cycle through suggestions: `Ctrl + n`, `Ctrl + p`
+
+### which-key
+Provides menu for key binding reminders
+#### Windows
+![](./readme/which-key-windows.png)
+#### Leader <space>
+![](./readme/which-key-leader.png)
+#### Miscellaneous
+![](./readme/which-key-z.png)
