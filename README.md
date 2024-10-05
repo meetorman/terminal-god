@@ -139,8 +139,9 @@ For quick git operations
   - Git commit: `cc`
   - Git push: `Pp`
   - Git diff: `d`
+  - Help: `?`
   
-![](./readme/neogit-help.png)
+    <img src="./readme/neogit-help.png" alt="Neogit Help" width="400">
 
 ### lazygit
 ![](./readme/lazygit.png)
