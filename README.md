@@ -102,6 +102,7 @@ UI for searching files, git files, projects, grep, etc
 
 ### neotree
 ![](./readme/neotree.png)
+
 Explorer - File browser
 - Toggle Explorer: `<space>e`
 
