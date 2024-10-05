@@ -133,7 +133,7 @@ UI for searching files, git files, projects, grep, etc
 - Find recent files: `<space>fr`
 - Find word: `<space>fw`
 - Find commands: `<space>fc`
-- Find: `<space>fm`
+- Find marks: `<space>fm`
 
 ### neotree
 <img src="./readme/neotree.png" alt="Neotree" width="300">
