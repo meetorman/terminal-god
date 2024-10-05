@@ -130,7 +130,7 @@ For editing, chatting, and explaining
 ![](./readme/neogit.png)
 For quick git operations
 - Neogit menu: `<space>g`
-  - Git status: `<space>gs`
+  - Git stage: `<space>gs`
   - Git commit: `<space>gc`
   - Git push: `<space>gP`
   - Git diff: `<space>gd`
