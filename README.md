@@ -108,7 +108,7 @@ Explorer - File browser
 - Toggle Explorer: `<space>e`
 
 ### notify
-![](./readme/notify.png)
+<img src="./readme/notify.png" alt="Notify" width="300">
 
 Display background terminal output in a notification, allows plugins to send notifications
 - Usage: `:Notify "message"`
