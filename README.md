@@ -132,7 +132,7 @@ For quick git operations
 - Neogit menu: `<space>g`
   - Git status: `<space>gs`
   - Git commit: `<space>gc`
-  - Git push: `<space>gp`
+  - Git push: `<space>gP`
   - Git diff: `<space>gd`
   - Git blame: `<space>gb`
 
