@@ -77,6 +77,15 @@ Prefix: `Ctrl + w`
 
 ## Plugins
 
+### which-key
+Provides menu for key binding reminders
+#### Windows `ctrl + w`
+![](./readme/which-key-windows.png)
+#### Leader `<space>`
+![](./readme/which-key-leader.png)
+#### Miscellaneous `k`
+![](./readme/which-key-z.png)
+
 ### telescope
 ![](./readme/telescope.png)
 UI for searching files, git files, projects, grep, etc
@@ -136,11 +145,4 @@ For more complex git operations (merging conflicts, squashing, etc.)
 - Cycle through suggestions: `Ctrl + n`, `Ctrl + p`
 #### COC
 ![](./readme/coc.png)
-### which-key
-Provides menu for key binding reminders
-#### Windows `ctrl + w`
-![](./readme/which-key-windows.png)
-#### Leader `<space>`
-![](./readme/which-key-leader.png)
-#### Miscellaneous `k`
-![](./readme/which-key-z.png)
+
