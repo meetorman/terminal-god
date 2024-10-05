@@ -1,3 +1,5 @@
+![](./readme/terminal-god.png)
+
 # Table of Contents
 
 - [Installation](#installation)
