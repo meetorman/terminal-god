@@ -48,17 +48,19 @@ Prefix: `Ctrl + b`
 
 ### Panes
 ![](./readme/tmux-panes.png)
-New pane (numpad direction):
-- `1`: bottom left
-- `2`: bottom (horizontal)
-- `3`: bottom right
-- `4`: left (vertical)
-- `6`: right (vertical)
-- `7`: top left
-- `8`: top (horizontal)
-- `9`: top right
 
-Resize pane: `Shift + Arrow key`
+- Prefix: `Ctrl + b`
+  - New pane (numpad direction):
+    - `1`: bottom left
+    - `2`: bottom (horizontal)
+    - `3`: bottom right
+    - `4`: left (vertical)
+    - `6`: right (vertical)
+    - `7`: top left
+    - `8`: top (horizontal)
+    - `9`: top right
+  - Switch pane: `o`
+- Resize pane: `Shift + Arrow key`
 
 ## nvim
 
@@ -77,7 +79,7 @@ Prefix: `Ctrl + w`
 
 ### telescope
 ![](./readme/telescope.png)
-File search, git files, etc.
+UI for searching files, git files, projects, grep, etc
 - Find files: `<space>ff`
 - Find git files: `<space>fg`
 - Find buffers: `<space>fb`
@@ -91,7 +93,7 @@ File search, git files, etc.
 
 ### neotree
 ![](./readme/neotree.png)
-File browser
+Explorer - File browser
 - Toggle Explorer: `<space>e`
 
 ### notify
@@ -136,9 +138,9 @@ For more complex git operations (merging conflicts, squashing, etc.)
 ![](./readme/coc.png)
 ### which-key
 Provides menu for key binding reminders
-#### Windows
+#### Windows `ctrl + w`
 ![](./readme/which-key-windows.png)
-#### Leader <space>
+#### Leader `<space>`
 ![](./readme/which-key-leader.png)
-#### Miscellaneous
+#### Miscellaneous `k`
 ![](./readme/which-key-z.png)
