@@ -134,6 +134,7 @@ For quick git operations
   - Git commit: `cc`
   - Git push: `Pp`
   - Git diff: `d`
+  
 ![](./readme/neogit-help.png)
 
 ### lazygit
