@@ -36,7 +36,7 @@
 ### Install dependencies
 ``` 
 brew install tmux 
-brew install neovim 
+brew install nvim
 ```
 
 To avoid Lazyvim warnings install lua 5.1.5 from source
