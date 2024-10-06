@@ -56,6 +56,7 @@ cd luarocks-3.11.1
 make
 sudo make install
 brew install mercurial ripgrep fd
+npm install -g neovim
 ```
 
 
