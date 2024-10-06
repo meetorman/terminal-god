@@ -52,7 +52,7 @@ To avoid Lazyvim warnings install lua 5.1.5 from source
 ```
 git clone git@github.com:meetorman/terminal-god.git
 mv terminal-god/.tmux.conf ~/.tmux.conf
-mv terminal-god/.config/nvim ~/.config/nvim
+mv terminal-god/* ~/.config/nvim
 ```
 
 # Usage
