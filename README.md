@@ -34,15 +34,10 @@
 # Installation
 
 ### Install dependencies
-``` 
-brew install tmux 
-brew install nvim
-```
 
-To avoid Lazyvim warnings install lua 5.1.5 from source
 ```
 cd /tmp
-brew install wget
+brew install tmux nvim wget
 wget https://www.lua.org/ftp/lua-5.1.5.tar.gz
 tar zxf lua-5.1.5.tar.gz
 cd lua-5.1.5
@@ -61,6 +56,7 @@ npm install -g prettier
 brew install black isort stylua
 brew install php julia composer rust go openjdk
 sudo ln -sfn $(brew --prefix)/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
+pip3 install neovim  --break-system-package
 ```
 
 
