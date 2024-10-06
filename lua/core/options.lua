@@ -1,7 +1,10 @@
 -- Disable Netrw (these are global options)
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_php_provider = 0
+vim.g.loaded_julia_provider = 0
+vim.g.loaded_ruby_provider = 0
 -- Local options
 local local_opts = {
     shiftwidth = 4,

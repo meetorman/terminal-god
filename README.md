@@ -55,7 +55,7 @@ cd luarocks-3.11.1
 ./configure --with-lua=/usr/local/ --lua-version=5.1
 make
 sudo make install
-brew install mercurial
+brew install mercurial ripgrep fd
 ```
 
 
