@@ -71,6 +71,16 @@ ln -s ~/.config/nvim/.tmux.conf ~/.tmux.conf
 ### Verify installation
 Run `nvim` and command `:checkhealth` to verify installation without errors.
 
+If you plan on using CoPilot and ChatGPT
+
+ - Copilot
+
+  Run command `:Copilot` to authenticate with Github
+
+- ChatGPT
+
+  Set environment variable `OPENAI_API_KEY` in `.zshrc`
+
 # Usage
 
 ```
