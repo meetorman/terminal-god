@@ -70,7 +70,7 @@ mv terminal-god ~/.config/nvim
 
 ### Verify installation
 Run `nvim` and command `:checkhealth` to verify installation without errors.
-```
+
 # Usage
 
 ```
