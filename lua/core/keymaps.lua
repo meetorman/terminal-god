@@ -1,5 +1,12 @@
 local map = require("helpers.keys").map
 local wk = require("which-key")
+-- Unmap default comment keybindings
+vim.keymap.del('n', 'gc')
+vim.keymap.del('n', 'gcc')
+vim.keymap.del('x', 'gc')
+vim.keymap.del('o', 'gc')
+vim.keymap.del('n', 'gx') 
+vim.keymap.del('n', 'g%') 
 -- Function to create the pass-through mapping
 local function z_passthrough()
     local key = vim.fn.getchar()
@@ -11,7 +18,7 @@ end
 -- Use wk.add to configure your keymaps
 wk.add({
   { "<leader>l", name = "Language (LSP)", group = "Language", icon="" }, 
-  { "<leader>lf", vim.lsp.buf.format, mode = "n", desc = "Format file", icon="󰉵" },
+  { "<leader>lb", vim.lsp.buf.format, mode = "n", desc = "Format file", icon="󰉵" },
 
     
   -- Movement and Selection
@@ -32,7 +39,7 @@ wk.add({
 --   { "<leader>d", [["_d]], mode = { "n", "v" }, desc = "Delete without yanking" },
 
   -- Miscellaneous
-  { "Q", "<nop>", mode = "n", desc = "Disable Ex mode" },
+  -- { "Q", "<nop>", mode = "n", desc = "Disable Ex mode" },
   { "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>", mode = "n", desc = "Open tmux sessionizer" },
 
   -- Quickfix and Location List Navigation
@@ -100,9 +107,16 @@ wk.add({
   { "<leader>lr", vim.lsp.buf.references, mode = "n", desc = "References", icon = "" },
   { "<leader>lh", vim.lsp.buf.hover, mode = "n", desc = "Hover", icon = "" },
   -- ... (keep your other existing mappings)
+  {"<leader>lc", group = "Comment", icon = "" },
+  { "<leader>lcc", function() require("Comment.api").toggle.linewise.current() end, mode = "n", desc = "Toggle comment" },
+  { "<leader>lcb", function() require("Comment.api").toggle.blockwise.current() end, mode = "n", desc = "Toggle block comment" },
+  { "<leader>lcO", function() require("Comment.api").insert.linewise.above() end, mode = "n", desc = "Comment above" },
+  { "<leader>lco", function() require("Comment.api").insert.linewise.below() end, mode = "n", desc = "Comment below" },
+  { "<leader>lcA", function() require("Comment.api").insert.linewise.eol() end, mode = "n", desc = "Comment at end of line" },
   { "<leader>g", "<cmd>Neogit<cr>", mode = "n", desc = "Git", icon="" },
+  
 })
-
+vim.keymap.set('n', 'Q', '<nop>', { noremap = true, silent = true })
 
 -- If you need to use setup_lsp_keymaps elsewhere, you can define it here
 -- local function setup_lsp_keymaps(bufnr)

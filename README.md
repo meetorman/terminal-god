@@ -57,6 +57,10 @@ make
 sudo make install
 brew install mercurial ripgrep fd
 npm install -g neovim
+npm install -g prettier
+brew install black isort stylua
+brew install php julia composer rust go openjdk
+sudo ln -sfn $(brew --prefix)/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
 ```
 
 
@@ -68,6 +72,9 @@ cp terminal-god/.tmux.conf ~/.tmux.conf
 mv terminal-god ~/.config/nvim
 ```
 
+### Verify installation
+Run `nvim` and command `:checkhealth` to verify installation without errors.
+```
 # Usage
 
 ```
