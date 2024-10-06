@@ -64,8 +64,8 @@ pip3 install neovim  --break-system-package
 ### Clone repo and install plugins
 ```
 git clone https://github.com/meetorman/terminal-god.git
-cp terminal-god/.tmux.conf ~/.tmux.conf
 mv terminal-god ~/.config/nvim
+ln -s ~/.config/nvim/.tmux.conf ~/.tmux.conf
 ```
 
 ### Verify installation
