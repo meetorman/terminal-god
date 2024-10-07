@@ -33,8 +33,8 @@
 
 # Installation
 
-### Option 1: Install with ansible 
-```
+### Option 1: Install with ansible (Preferred)
+`````
 curl -sL https://raw.githubusercontent.com/meetorman/terminal-god/main/playbook.yml | ansible-playbook -i localhost, /dev/stdin --ask-become-pass
 ```
 
@@ -47,12 +47,7 @@ cd /tmp
 brew install tmux nvim wget
 wget https://www.lua.org/ftp/lua-5.1.5.tar.gz
 tar zxf lua-5.1.5.tar.gz
-cd lua-5.1.5
-make macosx
-sudo make install
-cd ..
-wget https://luarocks.github.io/luarocks/releases/luarocks-3.11.1.tar.gz
-tar zxpf luarocks-3.11.1.tar.gz
+make linuxget https://luarocks.github.io/luarocks/releases/luarocks-3.11.1.tar.gz
 cd luarocks-3.11.1
 ./configure --with-lua=/usr/local/ --lua-version=5.1
 make
