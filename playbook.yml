@@ -14,93 +14,81 @@
       register: user_home
       changed_when: false
 
-    # - name: Ensure ~/.config directory exists
-    #   file:
-    #     path: "{{ user_home.stdout }}/.config"
-    #     state: directory
-    #     mode: '0755'
+    - name: Ensure ~/.config directory exists
+      file:
+        path: "{{ user_home.stdout }}/.config"
+        state: directory
+        mode: '0755'
 
-    # - name: Remove existing ~/.config/nvim if it exists
-    #   file:
-    #     path: "{{ user_home.stdout }}/.config/nvim"
-    #     state: absent
+    - name: Remove existing ~/.config/nvim if it exists
+      file:
+        path: "{{ user_home.stdout }}/.config/nvim"
+        state: absent
 
-    # - name: Download terminal-god repository zip
-    #   get_url:
-    #     url: "https://github.com/meetorman/terminal-god/archive/refs/heads/main.zip"
-    #     dest: "/tmp/terminal-god.zip"
-    #     mode: '0644'
+    - name: Clone terminal-god repository
+      git:
+        repo: "{{ repo_url }}"
+        dest: "/tmp/terminal-god"
+        version: main
 
-    # - name: Ensure unzip is installed
-    #   homebrew:
-    #     name: unzip
-    #     state: present
-    #   become: no
+    - name: Move terminal-god to ~/.config/nvim
+      command: mv /tmp/terminal-god "{{ user_home.stdout }}/.config/nvim"
+      args:
+        creates: "{{ user_home.stdout }}/.config/nvim"
 
-    # - name: Extract terminal-god repository
-    #   unarchive:
-    #     src: "/tmp/terminal-god.zip"
-    #     dest: "/tmp"
-    #     remote_src: yes
+    - name: Check if ~/.tmux.conf exists
+      stat:
+        path: "{{ user_home.stdout }}/.tmux.conf"
+      register: tmux_conf_stat
 
-    # - name: Move extracted files to ~/.config/nvim
-    #   command: mv /tmp/terminal-god-main "{{ user_home.stdout }}/.config/nvim"
-    #   args:
-    #     creates: "{{ user_home.stdout }}/.config/nvim"
+    - name: Backup existing ~/.tmux.conf if it exists
+      command: mv "{{ user_home.stdout }}/.tmux.conf" "{{ user_home.stdout }}/.tmux.conf.bak"
+      when: tmux_conf_stat.stat.exists and not tmux_conf_stat.stat.islnk
 
-    # - name: Check if ~/.tmux.conf exists
-    #   stat:
-    #     path: "{{ user_home.stdout }}/.tmux.conf"
-    #   register: tmux_conf_stat
+    - name: Remove existing ~/.tmux.conf symlink if it exists
+      file:
+        path: "{{ user_home.stdout }}/.tmux.conf"
+        state: absent
+      when: tmux_conf_stat.stat.exists and tmux_conf_stat.stat.islnk
 
-    # - name: Backup existing ~/.tmux.conf if it exists
-    #   command: mv "{{ user_home.stdout }}/.tmux.conf" "{{ user_home.stdout }}/.tmux.conf.bak"
-    #   when: tmux_conf_stat.stat.exists and not tmux_conf_stat.stat.islnk
+    - name: Create symbolic link for tmux config
+      file:
+        src: "{{ user_home.stdout }}/.config/nvim/.tmux.conf"
+        dest: "{{ user_home.stdout }}/.tmux.conf"
+        state: link
 
-    # - name: Remove existing ~/.tmux.conf symlink if it exists
-    #   file:
-    #     path: "{{ user_home.stdout }}/.tmux.conf"
-    #     state: absent
-    #   when: tmux_conf_stat.stat.exists and tmux_conf_stat.stat.islnk
+    - name: Clean up zip file
+      file:
+        path: "/tmp/terminal-god.zip"
+        state: absent
 
-    # - name: Create symbolic link for tmux config
-    #   file:
-    #     src: "{{ user_home.stdout }}/.config/nvim/.tmux.conf"
-    #     dest: "{{ user_home.stdout }}/.tmux.conf"
-    #     state: link
+    - name: Install Homebrew packages
+      community.general.homebrew:
+        name:
+          - tmux
+          - nvim
+          - lazygit
+          - wget
+          - mercurial
+          - ripgrep
+          - fd
+          - black
+          - isort
+          - stylua
+          - php
+          - julia
+          - composer
+          - rust
+          - go
+          - openjdk
+        state: present
+      become: no
 
-    # - name: Clean up zip file
-    #   file:
-    #     path: "/tmp/terminal-god.zip"
-    #     state: absent
-
-    # - name: Install Homebrew packages
-    #   community.general.homebrew:
-    #     name:
-    #       - tmux
-    #       - nvim
-    #       - lazygit
-    #       - wget
-    #       - mercurial
-    #       - ripgrep
-    #       - fd
-    #       - black
-    #       - isort
-    #       - stylua
-    #       - php
-    #       - julia
-    #       - composer
-    #       - rust
-    #       - go
-    #       - openjdk
-    #     state: present
-    #   become: no
-
-    # - name: Install GNU tar
-    #   community.general.homebrew:
-    #     name: gnu-tar
-    #     state: present
-    #   become: no
+    - name: Install GNU tar
+      community.general.homebrew:
+        name: gnu-tar
+        state: present
+      become: no
 
     - name: Create user bin directory
       file:
