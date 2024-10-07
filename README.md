@@ -38,9 +38,9 @@
 curl -s https://raw.githubusercontent.com/meetorman/terminal-god/main/ansible.yml | ansible-playbook - --ask-become-pass
 ```
 
-# Option 2: Install manually
+### Option 2: Install manually
 
-### Install dependencies
+#### Install dependencies
 
 ```
 cd /tmp
