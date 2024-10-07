@@ -68,7 +68,7 @@ pip3 install neovim  --break-system-package
 
 
 
-### Clone repo and install plugins
+#### Clone repo and install plugins
 ```
 git clone https://github.com/meetorman/terminal-god.git
 mv terminal-god ~/.config/nvim
