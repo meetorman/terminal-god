@@ -19,12 +19,14 @@ jobs:
     - name: Set up LuaRocks
       uses: leafo/gh-actions-luarocks@v4
 
-    - name: Create rockspec
+    - name: Create rockspec and Makefile
       run: |
         VERSION=$(git describe --tags --always)
         ROCKSPEC_VERSION="${VERSION}-1"
         ESCAPED_VERSION=$(echo $ROCKSPEC_VERSION | sed 's/[\/&]/\\&/g')
         ESCAPED_REPO=$(echo $GITHUB_REPOSITORY | sed 's/[\/&]/\\&/g')
+        
+        # Create rockspec
         cat > terminal-god-$ROCKSPEC_VERSION.rockspec << 'EOL'
         package = "terminal-god"
         version = "VERSION_PLACEHOLDER"
@@ -67,6 +69,18 @@ jobs:
         sed -i "s/VERSION_PLACEHOLDER/$ESCAPED_VERSION/g" terminal-god-$ROCKSPEC_VERSION.rockspec
         sed -i "s/REPO_PLACEHOLDER/$ESCAPED_REPO/g" terminal-god-$ROCKSPEC_VERSION.rockspec
         sed -i "s/TAG_PLACEHOLDER/$VERSION/g" terminal-god-$ROCKSPEC_VERSION.rockspec
+        
+        # Create Makefile
+        cat > Makefile << 'EOL'
+        TERMINAL_GOD_DIR=$(INST_LUADIR)/terminal-god
+
+        install:
+        	mkdir -p $(TERMINAL_GOD_DIR)
+        	cp -R * $(TERMINAL_GOD_DIR)
+
+        uninstall:
+        	rm -rf $(TERMINAL_GOD_DIR)
+        EOL
 
     - name: Build rock
       run: |
