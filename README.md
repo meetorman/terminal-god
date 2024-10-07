@@ -150,6 +150,8 @@ Provides menu for key binding reminders
 <img src="./readme/telescope.png" alt="Telescope" width="400">
 
 UI for searching files, git files, projects, grep, etc
+![](./readme/telescope-which-key.png)
+
 - Find files: `<space>ff`
 - Find buffers: `<space>fb`
 - Find help tags: `<space>fh`
@@ -159,7 +161,6 @@ UI for searching files, git files, projects, grep, etc
 - Find marks: `<space>fm`
 - Find diagnostics: `<space>fd`
 - Find jump list: `<space>fd`
-![](./readme/telescope-which-key.png)
 
 ### neotree
 <img src="./readme/neotree.png" alt="Neotree" width="300">
