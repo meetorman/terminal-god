@@ -43,6 +43,7 @@
         state: present
 
     - name: Install GNU tar
+      become: no
       homebrew:
         name: gnu-tar
         state: present
