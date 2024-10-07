@@ -33,6 +33,8 @@
 
 # Installation
 
+## Option 1: Install manually
+
 ### Install dependencies
 
 ```
@@ -66,6 +68,12 @@ pip3 install neovim  --break-system-package
 git clone https://github.com/meetorman/terminal-god.git
 mv terminal-god ~/.config/nvim
 ln -s ~/.config/nvim/.tmux.conf ~/.tmux.conf
+```
+
+## Option 2: Install with ansible (GPT generated/untested)
+
+```
+ansible-playbook ansible.yml --ask-become-pass
 ```
 
 ### Verify installation
