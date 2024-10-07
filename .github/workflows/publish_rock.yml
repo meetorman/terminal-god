@@ -50,7 +50,7 @@ jobs:
         build = {
            type = "make",
            install_variables = {
-              INST_CONFDIR = "$(LUAROCKS_SYSCONFDIR)"
+              INST_CONFDIR = "$(HOME)/.config"
            },
         }
         EOL
