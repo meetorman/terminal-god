@@ -61,13 +61,13 @@
           - go
           - openjdk
         state: present
-      become: yes  # Run as root
+      become: no
 
     - name: Install GNU tar
       community.general.homebrew:
         name: gnu-tar
         state: present
-      become: yes  # Run as root
+      become: no
 
     - name: Download and extract Lua
       unarchive:
