@@ -47,6 +47,7 @@
         name:
           - tmux
           - nvim
+          - lazygit
           - wget
           - mercurial
           - ripgrep
