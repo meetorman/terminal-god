@@ -150,17 +150,19 @@ Provides menu for key binding reminders
 <img src="./readme/telescope.png" alt="Telescope" width="400">
 
 UI for searching files, git files, projects, grep, etc
-![](./readme/telescope-which-key.png)
 
-- Find files: `<space>ff`
-- Find buffers: `<space>fb`
-- Find help tags: `<space>fh`
-- Find live grep: `<space>fg`
-- Find current word: `<space>fw`
-- Find references: `<space>fr`
-- Find marks: `<space>fm`
-- Find diagnostics: `<space>fd`
-- Find jump list: `<space>fd`
+- Telescope menu: `<space>f`
+  - Find files: `ff`
+  - Find buffers: `fb`
+  - Find help tags: `fh`
+  - Find live grep: `fg`
+  - Find current word: `fw`
+  - Find references: `fr`
+  - Find marks: `fm`
+  - Find diagnostics: `fd`
+  - Find jump list: `fd`
+
+![](./readme/telescope-which-key.png)
 
 ### neotree
 <img src="./readme/neotree.png" alt="Neotree" width="300">
