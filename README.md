@@ -145,6 +145,8 @@ Provides menu for key binding reminders
 ![](./readme/which-key-windows.png)
 #### Miscellaneous `k`
 ![](./readme/which-key-z.png)
+#### Telescope `f`
+![](./readme/telescope-which-key.png)
 
 ### telescope
 <img src="./readme/telescope.png" alt="Telescope" width="400">
@@ -162,7 +164,7 @@ UI for searching files, git files, projects, grep, etc
   - Find diagnostics: `fd`
   - Find jump list: `fd`
 
-![](./readme/telescope-which-key.png)
+
 
 ### neotree
 <img src="./readme/neotree.png" alt="Neotree" width="300">
