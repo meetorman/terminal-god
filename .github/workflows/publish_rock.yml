@@ -27,12 +27,12 @@ jobs:
         ESCAPED_REPO=$(echo $GITHUB_REPOSITORY | sed 's/[\/&]/\\&/g')
         
         # Create rockspec
-        cat > terminal-god-$ROCKSPEC_VERSION.rockspec << 'EOL'
+        cat > terminal-god-$ROCKSPEC_VERSION.rockspec << EOL
         package = "terminal-god"
-        version = "VERSION_PLACEHOLDER"
+        version = "$ROCKSPEC_VERSION"
         source = {
-           url = "git://github.com/REPO_PLACEHOLDER",
-           tag = "TAG_PLACEHOLDER"
+           url = "git://github.com/$GITHUB_REPOSITORY",
+           tag = "$VERSION"
         }
         description = {
            summary = "Terminal God - My Neovim configuration",
@@ -40,7 +40,7 @@ jobs:
               This is a complete Neovim configuration package including all necessary
               plugins and settings for the Terminal God setup.
            ]],
-           homepage = "https://github.com/REPO_PLACEHOLDER",
+           homepage = "https://github.com/$GITHUB_REPOSITORY",
            license = "MIT"
         }
         dependencies = {
@@ -50,24 +50,21 @@ jobs:
         build = {
            type = "make",
            install_variables = {
-              INST_CONFDIR = "$(HOME)/.config"
+              INST_CONFDIR = "$HOME/.local/share/nvim"
            },
         }
         EOL
-        sed -i "s/VERSION_PLACEHOLDER/$ESCAPED_VERSION/g" terminal-god-$ROCKSPEC_VERSION.rockspec
-        sed -i "s/REPO_PLACEHOLDER/$ESCAPED_REPO/g" terminal-god-$ROCKSPEC_VERSION.rockspec
-        sed -i "s/TAG_PLACEHOLDER/$VERSION/g" terminal-god-$ROCKSPEC_VERSION.rockspec
         
         # Create Makefile
-        cat > Makefile << 'EOL'
-        TERMINAL_GOD_DIR=$(INST_CONFDIR)/nvim
+        cat > Makefile << EOL
+        TERMINAL_GOD_DIR=\$(INST_CONFDIR)
 
         install:
-        	mkdir -p $(TERMINAL_GOD_DIR)
-        	cp -R * $(TERMINAL_GOD_DIR)
+        	mkdir -p \$(TERMINAL_GOD_DIR)
+        	cp -R * \$(TERMINAL_GOD_DIR)
 
         uninstall:
-        	rm -rf $(TERMINAL_GOD_DIR)
+        	rm -rf \$(TERMINAL_GOD_DIR)
         EOL
 
     - name: Build rock
