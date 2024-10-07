@@ -35,7 +35,7 @@
 
 ### Option 1: Install with ansible 
 ```
-curl -sL https://raw.githubusercontent.com/meetorman/terminal-god/main/ansible.yml | ansible-playbook -i localhost, /dev/stdin --ask-become-pass
+curl -sL https://raw.githubusercontent.com/meetorman/terminal-god/main/playbook.yml | ansible-playbook -i localhost, /dev/stdin --ask-become-pass
 ```
 
 ### Option 2: Install manually
