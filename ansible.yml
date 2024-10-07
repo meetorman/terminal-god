@@ -9,10 +9,21 @@
     config_dir: "{{ ansible_env.HOME }}/.config/nvim"
 
   tasks:
+    - name: Ensure ~/.config directory exists
+      file:
+        path: "{{ ansible_env.HOME }}/.config"
+        state: directory
+        mode: '0755'
+
+    - name: Remove existing ~/.config/nvim if it exists
+      file:
+        path: "{{ ansible_env.HOME }}/.config/nvim"
+        state: absent
+
     - name: Clone terminal-god repository
       git:
         repo: "{{ repo_url }}"
-        dest: "{{ config_dir }}"
+        dest: "{{ ansible_env.HOME }}/.config/nvim"
         version: main
 
     - name: Create symbolic link for tmux config
