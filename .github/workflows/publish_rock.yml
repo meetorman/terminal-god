@@ -43,7 +43,7 @@ jobs:
            "lua >= 5.1",
         }
         build = {
-           type = "copy",
+           type = "builtin",
            modules = {
               ["terminal-god"] = "init.lua",
            },
