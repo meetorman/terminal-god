@@ -90,11 +90,41 @@
         - prettier
       become: no  # Don't use sudo for npm global installs
 
-    - name: Create symlink for Java
+    - name: Check OpenJDK installation path
+      stat:
+        path: /opt/homebrew/opt/openjdk/libexec/openjdk.jdk
+      register: openjdk_path
+
+    - name: Create symlink for Java (Apple Silicon)
       file:
-        src: "{{ ansible_env.HOME }}/homebrew/opt/openjdk/libexec/openjdk.jdk"
+        src: /opt/homebrew/opt/openjdk/libexec/openjdk.jdk
         dest: /Library/Java/JavaVirtualMachines/openjdk.jdk
         state: link
+      when: openjdk_path.stat.exists
+      become: yes
+
+    - name: Check OpenJDK installation path (Intel fallback)
+      stat:
+        path: /usr/local/opt/openjdk/libexec/openjdk.jdk
+      register: openjdk_path_intel
+      when: not openjdk_path.stat.exists
+
+    - name: Create symlink for Java (Intel Mac)
+      file:
+        src: /usr/local/opt/openjdk/libexec/openjdk.jdk
+        dest: /Library/Java/JavaVirtualMachines/openjdk.jdk
+        state: link
+      when: 
+        - not openjdk_path.stat.exists
+        - openjdk_path_intel.stat.exists
+      become: yes
+
+    - name: Print warning if OpenJDK not found
+      debug:
+        msg: "WARNING: OpenJDK installation not found. Please ensure it's installed via Homebrew."
+      when: 
+        - not openjdk_path.stat.exists
+        - not openjdk_path_intel.stat.exists
 
     - name: Install neovim Python package
       pip:
