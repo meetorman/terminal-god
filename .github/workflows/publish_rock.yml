@@ -50,12 +50,6 @@ jobs:
         }
         EOL
 
-    - name: Build rock
-      run: |
-        VERSION="0.1.$(git rev-list --count HEAD)"
-        ROCKSPEC_VERSION="${VERSION}-1"
-        luarocks make terminal-god-$ROCKSPEC_VERSION.rockspec --local
-
     - name: Install JSON library
       run: luarocks install dkjson
 
@@ -66,5 +60,4 @@ jobs:
         VERSION="0.1.$(git rev-list --count HEAD)"
         ROCKSPEC_VERSION="${VERSION}-1"
         luarocks config --local github_token $GITHUB_TOKEN
-        sleep 5  # Add a small delay
-        luarocks upload terminal-god-$ROCKSPEC_VERSION.rockspec --api-key=github --force
+        luarocks upload terminal-god-$ROCKSPEC_VERSION.rockspec --api-key=github --force --skip-pack
