@@ -208,7 +208,7 @@ For editing, chatting, and explaining
 <img src="./readme/neogit.png" alt="Neogit" width="400">
 
 For quick git operations
-- Neogit menu: `<space>g`
+- Open Neogit: `<space>g`
   - Git stage: `s`
   - Git commit: `cc`
   - Git push: `Pp`
@@ -231,7 +231,9 @@ For viewing undo history
 
 ### Autocompletion
 #### CoPilot
-- Cycle through suggestions: `Ctrl + n`, `Ctrl + p`
+- Cycle through suggestions: 
+    - Next suggestion: `Ctrl + n`
+    - Previous suggestion: `Ctrl + p`
 #### COC
 <img src="./readme/coc.png" alt="COC" width="300">
 
