@@ -31,6 +31,10 @@
         repo: "{{ repo_url }}"
         dest: "/tmp/terminal-god"
         version: main
+      environment:
+        HTTP_PROXY: "{{ lookup('env', 'HTTP_PROXY') }}"
+        HTTPS_PROXY: "{{ lookup('env', 'HTTPS_PROXY') }}"
+        NO_PROXY: "{{ lookup('env', 'NO_PROXY') }}"
 
     - name: Move terminal-god to ~/.config/nvim
       command: mv /tmp/terminal-god "{{ user_home.stdout }}/.config/nvim"
