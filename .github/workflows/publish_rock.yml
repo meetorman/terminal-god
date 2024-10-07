@@ -19,14 +19,10 @@ jobs:
     - name: Set up LuaRocks
       uses: leafo/gh-actions-luarocks@v4
 
-    - name: Create rockspec and Makefile
+    - name: Create rockspec
       run: |
         VERSION=$(git describe --tags --always)
         ROCKSPEC_VERSION="${VERSION}-1"
-        ESCAPED_VERSION=$(echo $ROCKSPEC_VERSION | sed 's/[\/&]/\\&/g')
-        ESCAPED_REPO=$(echo $GITHUB_REPOSITORY | sed 's/[\/&]/\\&/g')
-        
-        # Create rockspec
         cat > terminal-god-$ROCKSPEC_VERSION.rockspec << EOL
         package = "terminal-god"
         version = "$ROCKSPEC_VERSION"
@@ -45,38 +41,14 @@ jobs:
         }
         dependencies = {
            "lua >= 5.1",
-           -- List your dependencies here
         }
         build = {
-           type = "make",
-           install_variables = {
-              INST_CONFDIR = "$(PWD)/install"
+           type = "copy",
+           modules = {
+              ["terminal-god"] = "init.lua",
            },
         }
         EOL
-        
-        # Create Makefile
-        cat > Makefile << EOL
-        TERMINAL_GOD_DIR=\$(INST_CONFDIR)
-
-        install:
-        	mkdir -p \$(TERMINAL_GOD_DIR)
-        	cp -R * \$(TERMINAL_GOD_DIR)
-
-        uninstall:
-        	rm -rf \$(TERMINAL_GOD_DIR)
-        EOL
-
-    - name: Debug information
-      run: |
-        echo "Workspace directory: $GITHUB_WORKSPACE"
-        echo "Current directory: $(pwd)"
-        echo "Contents of current directory:"
-        ls -la
-        echo "Rockspec content:"
-        cat terminal-god-*.rockspec
-        echo "Makefile content:"
-        cat Makefile
 
     - name: Build rock
       run: |
