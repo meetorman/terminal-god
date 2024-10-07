@@ -147,6 +147,8 @@ Provides menu for key binding reminders
 ![](./readme/which-key-z.png)
 #### Telescope `<space>f`
 ![](./readme/telescope-which-key.png)
+#### Language (LSP) `<space>l`
+![](./readme/language-which-key.png)
 
 ### telescope
 <img src="./readme/telescope.png" alt="Telescope" width="400">
