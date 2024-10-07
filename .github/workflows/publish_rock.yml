@@ -50,7 +50,7 @@ jobs:
         build = {
            type = "make",
            install_variables = {
-              INST_CONFDIR = "\$(LUAROCKS_PREFIX)"
+              INST_CONFDIR = "$GITHUB_WORKSPACE/install"
            },
         }
         EOL
