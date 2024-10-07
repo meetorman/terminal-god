@@ -21,14 +21,14 @@ jobs:
 
     - name: Create rockspec
       run: |
-        VERSION=$(git describe --tags --always)
+        VERSION="0.1.$(git rev-list --count HEAD)"
         ROCKSPEC_VERSION="${VERSION}-1"
         cat > terminal-god-$ROCKSPEC_VERSION.rockspec << EOL
         package = "terminal-god"
         version = "$ROCKSPEC_VERSION"
         source = {
            url = "git://github.com/$GITHUB_REPOSITORY",
-           tag = "$VERSION"
+           tag = "v$VERSION"
         }
         description = {
            summary = "Terminal God - My Neovim configuration",
@@ -52,7 +52,7 @@ jobs:
 
     - name: Build rock
       run: |
-        VERSION=$(git describe --tags --always)
+        VERSION="0.1.$(git rev-list --count HEAD)"
         ROCKSPEC_VERSION="${VERSION}-1"
         luarocks make terminal-god-$ROCKSPEC_VERSION.rockspec --local
 
@@ -63,7 +63,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        VERSION=$(git describe --tags --always)
+        VERSION="0.1.$(git rev-list --count HEAD)"
         ROCKSPEC_VERSION="${VERSION}-1"
         luarocks config --local github_token $GITHUB_TOKEN
-        luarocks upload terminal-god-$ROCKSPEC_VERSION.rockspec --api-key=github
+        sleep 5  # Add a small delay
+        luarocks upload terminal-god-$ROCKSPEC_VERSION.rockspec --api-key=github --force
