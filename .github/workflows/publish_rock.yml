@@ -49,20 +49,8 @@ jobs:
         }
         build = {
            type = "make",
-           build_variables = {
-              CFLAGS="$(CFLAGS)",
-              LIBFLAG="$(LIBFLAG)",
-              LUA_LIBDIR="$(LUA_LIBDIR)",
-              LUA_BINDIR="$(LUA_BINDIR)",
-              LUA_INCDIR="$(LUA_INCDIR)",
-              LUA="$(LUA)",
-           },
            install_variables = {
-              INST_PREFIX="$(PREFIX)",
-              INST_BINDIR="$(BINDIR)",
-              INST_LIBDIR="$(LIBDIR)",
-              INST_LUADIR="$(LUADIR)",
-              INST_CONFDIR="$(CONFDIR)",
+              INST_CONFDIR = "$(LUAROCKS_SYSCONFDIR)"
            },
         }
         EOL
@@ -72,7 +60,7 @@ jobs:
         
         # Create Makefile
         cat > Makefile << 'EOL'
-        TERMINAL_GOD_DIR=$(INST_LUADIR)/terminal-god
+        TERMINAL_GOD_DIR=$(INST_CONFDIR)/nvim
 
         install:
         	mkdir -p $(TERMINAL_GOD_DIR)
@@ -93,5 +81,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         VERSION=$(git describe --tags --always)
+        ROCKSPEC_VERSION="${VERSION}-1"
         luarocks config --local github_token $GITHUB_TOKEN
-        luarocks upload terminal-god-$VERSION.rockspec --api-key=github
+        luarocks upload terminal-god-$ROCKSPEC_VERSION.rockspec --api-key=github
