@@ -27,10 +27,8 @@
         state: absent
 
     - name: Clone terminal-god repository
-      git:
-        repo: "{{ repo_url }}"
-        dest: "/tmp/terminal-god"
-        version: main
+      command: >
+        git clone {{ repo_url }} /tmp/terminal-god
       environment:
         http_proxy: "{{ lookup('env', 'http_proxy') | default(lookup('env', 'HTTP_PROXY'), true) }}"
         https_proxy: "{{ lookup('env', 'https_proxy') | default(lookup('env', 'HTTPS_PROXY'), true) }}"
@@ -38,6 +36,9 @@
         HTTP_PROXY: "{{ lookup('env', 'HTTP_PROXY') | default(lookup('env', 'http_proxy'), true) }}"
         HTTPS_PROXY: "{{ lookup('env', 'HTTPS_PROXY') | default(lookup('env', 'https_proxy'), true) }}"
         NO_PROXY: "{{ lookup('env', 'NO_PROXY') | default(lookup('env', 'no_proxy'), true) }}"
+        GIT_SSL_NO_VERIFY: "true"
+      register: git_result
+      ignore_errors: yes
 
     - name: Move terminal-god to ~/.config/nvim
       command: mv /tmp/terminal-god "{{ user_home.stdout }}/.config/nvim"
