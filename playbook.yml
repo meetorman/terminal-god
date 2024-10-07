@@ -171,6 +171,40 @@
         extra_args: --user
       become: no
 
+    - name: Download terminal-god repository zip
+      get_url:
+        url: "https://github.com/meetorman/terminal-god/archive/refs/heads/main.zip"
+        dest: "/tmp/terminal-god.zip"
+        mode: '0644'
+
+    - name: Ensure unzip is installed
+      homebrew:
+        name: unzip
+        state: present
+      become: no
+
+    - name: Extract terminal-god repository
+      unarchive:
+        src: "/tmp/terminal-god.zip"
+        dest: "/tmp"
+        remote_src: yes
+
+    - name: Move extracted files to ~/.config/nvim
+      command: mv /tmp/terminal-god-main "{{ user_home.stdout }}/.config/nvim"
+      args:
+        creates: "{{ user_home.stdout }}/.config/nvim"
+
+    - name: Create symbolic link for tmux config
+      file:
+        src: "{{ user_home.stdout }}/.config/nvim/.tmux.conf"
+        dest: "{{ user_home.stdout }}/.tmux.conf"
+        state: link
+
+    - name: Clean up zip file
+      file:
+        path: "/tmp/terminal-god.zip"
+        state: absent
+
 - name: Finalize setup
   hosts: localhost
   connection: local
