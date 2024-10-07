@@ -33,7 +33,12 @@
 
 # Installation
 
-## Option 1: Install manually
+### Option 1: Install with ansible 
+```
+curl -s https://raw.githubusercontent.com/meetorman/terminal-god/main/ansible.yml | ansible-playbook - --ask-become-pass
+```
+
+# Option 2: Install manually
 
 ### Install dependencies
 
@@ -70,13 +75,7 @@ mv terminal-god ~/.config/nvim
 ln -s ~/.config/nvim/.tmux.conf ~/.tmux.conf
 ```
 
-## Option 2: Install with ansible (GPT generated/untested)
-
-```
-curl -s https://raw.githubusercontent.com/meetorman/terminal-god/main/ansible.yml | ansible-playbook - --ask-become-pass
-```
-
-### Verify installation
+## Verify installation
 Run `nvim` and command `:checkhealth` to verify installation without errors.
 
 If you plan on using CoPilot and ChatGPT
