@@ -57,7 +57,7 @@ jobs:
         
         # Create Makefile
         cat > Makefile << EOL
-        TERMINAL_GOD_DIR=\$(INST_CONFDIR)/nvim
+        TERMINAL_GOD_DIR=\$(INST_CONFDIR)
 
         install:
         	mkdir -p \$(TERMINAL_GOD_DIR)
