@@ -82,11 +82,11 @@ If you plan on using CoPilot and ChatGPT
 
  - Copilot
 
-  Run command `:Copilot` to authenticate with Github
+    - Run command `:Copilot` to authenticate with Github
 
 - ChatGPT
 
-  Set environment variable `OPENAI_API_KEY` in `.zshrc`
+    - Set environment variable `OPENAI_API_KEY` in `.zshrc`
 
 # Usage
 
