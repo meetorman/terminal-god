@@ -57,7 +57,7 @@ jobs:
         
         # Create Makefile
         cat > Makefile << EOL
-        TERMINAL_GOD_DIR=\$(INST_CONFDIR)
+        TERMINAL_GOD_DIR=\$(HOME)/.local/share/nvim
 
         install:
         	mkdir -p \$(TERMINAL_GOD_DIR)
@@ -67,11 +67,22 @@ jobs:
         	rm -rf \$(TERMINAL_GOD_DIR)
         EOL
 
+    - name: Debug information
+      run: |
+        echo "Home directory: $HOME"
+        echo "Current directory: $(pwd)"
+        echo "Contents of current directory:"
+        ls -la
+        echo "Rockspec content:"
+        cat terminal-god-*.rockspec
+        echo "Makefile content:"
+        cat Makefile
+
     - name: Build rock
       run: |
         VERSION=$(git describe --tags --always)
         ROCKSPEC_VERSION="${VERSION}-1"
-        luarocks make terminal-god-$ROCKSPEC_VERSION.rockspec
+        luarocks make terminal-god-$ROCKSPEC_VERSION.rockspec --verbose
 
     - name: Publish to LuaRocks
       env:
