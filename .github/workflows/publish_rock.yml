@@ -50,7 +50,7 @@ jobs:
         build = {
            type = "make",
            install_variables = {
-              INST_CONFDIR = "$GITHUB_WORKSPACE/install"
+              INST_CONFDIR = "$(PWD)/install"
            },
         }
         EOL
@@ -82,7 +82,7 @@ jobs:
       run: |
         VERSION=$(git describe --tags --always)
         ROCKSPEC_VERSION="${VERSION}-1"
-        luarocks make terminal-god-$ROCKSPEC_VERSION.rockspec --tree=$GITHUB_WORKSPACE/luarocks --local
+        luarocks make terminal-god-$ROCKSPEC_VERSION.rockspec --local
 
     - name: Publish to LuaRocks
       env:
