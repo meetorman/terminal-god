@@ -23,8 +23,13 @@
     - name: Clone terminal-god repository
       git:
         repo: "{{ repo_url }}"
-        dest: "{{ ansible_env.HOME }}/.config/nvim"
+        dest: "/tmp/terminal-god"
         version: main
+
+    - name: Move terminal-god to ~/.config/nvim
+      command: mv /tmp/terminal-god {{ ansible_env.HOME }}/.config/nvim
+      args:
+        creates: "{{ ansible_env.HOME }}/.config/nvim"
 
     - name: Create symbolic link for tmux config
       file:
