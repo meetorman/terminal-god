@@ -2,48 +2,45 @@
 - name: Setup Development Environment
   hosts: localhost
   connection: local
-  become: yes
+  become: no  # Change this to 'no' to run as the current user
   vars:
     repo_url: "https://github.com/meetorman/terminal-god.git"
+    config_dir: "{{ ansible_env.HOME }}/.config/nvim"
 
   tasks:
 
     - name: Get the user's home directory
-      debug:
-        msg: "{{ ansible_env.HOME }}"
-      register: user_home  # Register the output for later use
-      become: no  # Ensure this runs as the intended user
+      command: echo $HOME
+      register: user_home
+      changed_when: false
+
     - name: Ensure ~/.config directory exists
       file:
-        path: "{{ user_home }}/.config"
+        path: "{{ user_home.stdout }}/.config"
         state: directory
-        mode: '00755'
-      become: no  # Do not run as root
-
-    - name: Debug user home directory
-      debug:
-        var: user_home
+        mode: '0755'
 
     - name: Remove existing ~/.config/nvim if it exists
       file:
-        path: "{{ user_home }}/.config/nvim"
+        path: "{{ user_home.stdout }}/.config/nvim"
         state: absent
-      become: no  # Do not run as root
 
-    - name: Clone terminal-god repository into ~/.config/nvim
+    - name: Clone terminal-god repository
       git:
         repo: "{{ repo_url }}"
-        dest: "{{ user_home }}/.config/nvim"
+        dest: "/tmp/terminal-god"
         version: main
-        force: yes
-      become: no  # Do not run as root
+
+    - name: Move terminal-god to ~/.config/nvim
+      command: mv /tmp/terminal-god "{{ user_home.stdout }}/.config/nvim"
+      args:
+        creates: "{{ user_home.stdout }}/.config/nvim"
 
     - name: Create symbolic link for tmux config
       file:
-        src: "{{ user_home }}/.config/nvim/.tmux.conf"
-        dest: "{{ user_home }}/.tmux.conf"
+        src: "{{ user_home.stdout }}/.config/nvim/.tmux.conf"
+        dest: "{{ user_home.stdout }}/.tmux.conf"
         state: link
-      become: no  # Do not run as root
 
     - name: Install Homebrew packages
       community.general.homebrew:
