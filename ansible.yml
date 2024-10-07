@@ -3,7 +3,6 @@
   hosts: localhost
   connection: local
   become: yes
-  become_method: sudo
   vars:
     repo_url: "https://github.com/meetorman/terminal-god.git"
     config_dir: "{{ ansible_env.HOME }}/.config/nvim"
@@ -13,23 +12,14 @@
       file:
         path: "{{ ansible_env.HOME }}/.config"
         state: directory
-        mode: '0755'
+        mode: '00755'
 
-    - name: Remove existing ~/.config/nvim if it exists
-      file:
-        path: "{{ ansible_env.HOME }}/.config/nvim"
-        state: absent
-
-    - name: Clone terminal-god repository
+    - name: Clone terminal-god repository into ~/.config/nvim
       git:
         repo: "{{ repo_url }}"
-        dest: "/tmp/terminal-god"
+        dest: "{{ config_dir }}"
         version: main
-
-    - name: Move terminal-god to ~/.config/nvim
-      command: mv /tmp/terminal-god {{ ansible_env.HOME }}/.config/nvim
-      args:
-        creates: "{{ ansible_env.HOME }}/.config/nvim"
+        force: yes  # Force the update if the directory already exists
 
     - name: Create symbolic link for tmux config
       file:
@@ -60,7 +50,7 @@
 
     - name: Install GNU tar
       become: no
-      homebrew:
+      community.general.homebrew:
         name: gnu-tar
         state: present
 
@@ -73,11 +63,11 @@
         PATH: /usr/local/opt/gnu-tar/libexec/gnubin:{{ ansible_env.PATH }}
 
     - name: Build and install Lua
-      shell:
-        cmd: |
-          cd /tmp/lua-5.1.5
-          make macosx
-          make install
+      shell: |
+        cd /tmp/lua-5.1.5
+        make macosx
+        make install
+      args:
         creates: /usr/local/bin/lua
 
     - name: Download and extract LuaRocks
@@ -89,12 +79,12 @@
         PATH: /usr/local/opt/gnu-tar/libexec/gnubin:{{ ansible_env.PATH }}
 
     - name: Configure, build, and install LuaRocks
-      shell:
-        cmd: |
-          cd /tmp/luarocks-3.11.1
-          ./configure --with-lua=/usr/local/ --lua-version=5.1
-          make
-          make install
+      shell: |
+        cd /tmp/luarocks-3.11.1
+        ./configure --with-lua=/usr/local/ --lua-version=5.1
+        make
+        make install
+      args:
         creates: /usr/local/bin/luarocks
 
     - name: Install global npm packages
@@ -154,4 +144,3 @@
     - name: Print setup complete message
       debug:
         msg: "Setup complete. Please restart your terminal or run 'source ~/.zshrc'"
-
