@@ -6,6 +6,7 @@
   vars:
     repo_url: "https://github.com/meetorman/terminal-god.git"
     config_dir: "{{ ansible_env.HOME }}/.config/nvim"
+    ansible_python_interpreter: /usr/bin/python3
 
   tasks:
 
@@ -150,11 +151,17 @@
         - not openjdk_path.stat.exists
         - not openjdk_path_intel.stat.exists
 
+    - name: Install packaging Python library
+      pip:
+        name: packaging
+        extra_args: --user
+      become: no
+
     - name: Install neovim Python package
       pip:
         name: neovim
-        extra_args: --break-system-package
-      become: yes  # Run as root
+        extra_args: --user
+      become: no
 
 - name: Finalize setup
   hosts: localhost
