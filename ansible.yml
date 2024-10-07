@@ -42,11 +42,18 @@
           - openjdk
         state: present
 
+    - name: Install GNU tar
+      homebrew:
+        name: gnu-tar
+        state: present
+
     - name: Download and extract Lua
       unarchive:
         src: https://www.lua.org/ftp/lua-5.1.5.tar.gz
         dest: /tmp
         remote_src: yes
+      environment:
+        PATH: /usr/local/opt/gnu-tar/libexec/gnubin:{{ ansible_env.PATH }}
 
     - name: Build and install Lua
       shell:
@@ -61,6 +68,8 @@
         src: https://luarocks.github.io/luarocks/releases/luarocks-3.11.1.tar.gz
         dest: /tmp
         remote_src: yes
+      environment:
+        PATH: /usr/local/opt/gnu-tar/libexec/gnubin:{{ ansible_env.PATH }}
 
     - name: Configure, build, and install LuaRocks
       shell:
