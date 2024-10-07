@@ -22,14 +22,15 @@ jobs:
     - name: Create rockspec
       run: |
         VERSION=$(git describe --tags --always)
-        ESCAPED_VERSION=$(echo $VERSION | sed 's/[\/&]/\\&/g')
+        ROCKSPEC_VERSION="${VERSION}-1"
+        ESCAPED_VERSION=$(echo $ROCKSPEC_VERSION | sed 's/[\/&]/\\&/g')
         ESCAPED_REPO=$(echo $GITHUB_REPOSITORY | sed 's/[\/&]/\\&/g')
-        cat > terminal-god-$VERSION.rockspec << 'EOL'
+        cat > terminal-god-$ROCKSPEC_VERSION.rockspec << 'EOL'
         package = "terminal-god"
-        version = "VERSION_PLACEHOLDER-1"
+        version = "VERSION_PLACEHOLDER"
         source = {
            url = "git://github.com/REPO_PLACEHOLDER",
-           tag = "VERSION_PLACEHOLDER"
+           tag = "TAG_PLACEHOLDER"
         }
         description = {
            summary = "Terminal God - My Neovim configuration",
@@ -47,29 +48,31 @@ jobs:
         build = {
            type = "make",
            build_variables = {
-              CFLAGS="\$(CFLAGS)",
-              LIBFLAG="\$(LIBFLAG)",
-              LUA_LIBDIR="\$(LUA_LIBDIR)",
-              LUA_BINDIR="\$(LUA_BINDIR)",
-              LUA_INCDIR="\$(LUA_INCDIR)",
-              LUA="\$(LUA)",
+              CFLAGS="$(CFLAGS)",
+              LIBFLAG="$(LIBFLAG)",
+              LUA_LIBDIR="$(LUA_LIBDIR)",
+              LUA_BINDIR="$(LUA_BINDIR)",
+              LUA_INCDIR="$(LUA_INCDIR)",
+              LUA="$(LUA)",
            },
            install_variables = {
-              INST_PREFIX="\$(PREFIX)",
-              INST_BINDIR="\$(BINDIR)",
-              INST_LIBDIR="\$(LIBDIR)",
-              INST_LUADIR="\$(LUADIR)",
-              INST_CONFDIR="\$(CONFDIR)",
+              INST_PREFIX="$(PREFIX)",
+              INST_BINDIR="$(BINDIR)",
+              INST_LIBDIR="$(LIBDIR)",
+              INST_LUADIR="$(LUADIR)",
+              INST_CONFDIR="$(CONFDIR)",
            },
         }
         EOL
-        sed -i "s/VERSION_PLACEHOLDER/$ESCAPED_VERSION/g" terminal-god-$VERSION.rockspec
-        sed -i "s/REPO_PLACEHOLDER/$ESCAPED_REPO/g" terminal-god-$VERSION.rockspec
+        sed -i "s/VERSION_PLACEHOLDER/$ESCAPED_VERSION/g" terminal-god-$ROCKSPEC_VERSION.rockspec
+        sed -i "s/REPO_PLACEHOLDER/$ESCAPED_REPO/g" terminal-god-$ROCKSPEC_VERSION.rockspec
+        sed -i "s/TAG_PLACEHOLDER/$VERSION/g" terminal-god-$ROCKSPEC_VERSION.rockspec
 
     - name: Build rock
       run: |
         VERSION=$(git describe --tags --always)
-        luarocks make terminal-god-$VERSION.rockspec
+        ROCKSPEC_VERSION="${VERSION}-1"
+        luarocks make terminal-god-$ROCKSPEC_VERSION.rockspec
 
     - name: Publish to LuaRocks
       env:
