@@ -2,14 +2,13 @@
 - name: Setup Development Environment
   hosts: localhost
   connection: local
-  become: no  # Change this to 'no' to run as the current user
+  become: no
   vars:
     repo_url: "https://github.com/meetorman/terminal-god.git"
     config_dir: "{{ ansible_env.HOME }}/.config/nvim"
     ansible_python_interpreter: /usr/bin/python3
 
   tasks:
-
     - name: Get the user's home directory
       command: echo $HOME
       register: user_home
@@ -118,7 +117,7 @@
     - name: Build and install Lua (user-level)
       shell: |
         cd /tmp/lua-5.1.5
-        make linux LOCAL="{{ user_home.stdout }}/.local"
+        make macosx LOCAL="{{ user_home.stdout }}/.local"
         make install LOCAL="{{ user_home.stdout }}/.local"
       args:
         creates: "{{ user_home.stdout }}/.local/bin/lua"
@@ -142,7 +141,6 @@
       homebrew:
         name: openjdk
         state: present
-      become: no
 
     - name: Create user-level Java directory
       file:
@@ -169,56 +167,16 @@
       loop:
         - neovim
         - prettier
-      become: no  # Don't use sudo for npm global installs
-
-    - name: Check OpenJDK installation path
-      stat:
-        path: /opt/homebrew/opt/openjdk/libexec/openjdk.jdk
-      register: openjdk_path
-
-    - name: Create symlink for Java (Apple Silicon)
-      file:
-        src: /opt/homebrew/opt/openjdk/libexec/openjdk.jdk
-        dest: /Library/Java/JavaVirtualMachines/openjdk.jdk
-        state: link
-      when: openjdk_path.stat.exists
-      become: yes  # Run as root
-
-    - name: Check OpenJDK installation path (Intel fallback)
-      stat:
-        path: /usr/local/opt/openjdk/libexec/openjdk.jdk
-      register: openjdk_path_intel
-      when: not openjdk_path.stat.exists
-
-    - name: Create symlink for Java (Intel Mac)
-      file:
-        src: /usr/local/opt/openjdk/libexec/openjdk.jdk
-        dest: /Library/Java/JavaVirtualMachines/openjdk.jdk
-        state: link
-      when: 
-        - not openjdk_path.stat.exists
-        - openjdk_path_intel.stat.exists
-      become: yes  # Run as root
-
-    - name: Print warning if OpenJDK not found
-      debug:
-        msg: "WARNING: OpenJDK installation not found. Please ensure it's installed via Homebrew."
-      when: 
-        - not openjdk_path.stat.exists
-        - not openjdk_path_intel.stat.exists
 
     - name: Install packaging Python library
       pip:
         name: packaging
         extra_args: --user
-      become: no
 
     - name: Install neovim Python package
       pip:
         name: neovim
         extra_args: --user
-      become: no
-
 
 - name: Finalize setup
   hosts: localhost
