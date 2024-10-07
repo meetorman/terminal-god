@@ -22,7 +22,7 @@ jobs:
     - name: Create rockspec
       run: |
         VERSION="0.1.$(git rev-list --count HEAD)"
-        ROCKSPEC_VERSION="${VERSION}-1"
+        ROCKSPEC_VERSION="${VERSION}-2"
         cat > terminal-god-$ROCKSPEC_VERSION.rockspec << EOL
         package = "terminal-god"
         version = "$ROCKSPEC_VERSION"
@@ -44,11 +44,17 @@ jobs:
         }
         build = {
            type = "builtin",
-           modules = {
-              ["terminal-god"] = "init.lua",
-           },
+           modules = {},
         }
         EOL
+        
+        # Dynamically add all Lua files to the modules table
+        echo "    modules = {" >> terminal-god-$ROCKSPEC_VERSION.rockspec
+        find . -name "*.lua" | while read file; do
+          module_name=$(echo $file | sed 's/^\.\/lua\//terminal-god./' | sed 's/\.lua$//' | sed 's/\//./g')
+          echo "        [\"$module_name\"] = \"$file\"," >> terminal-god-$ROCKSPEC_VERSION.rockspec
+        done
+        echo "    }," >> terminal-god-$ROCKSPEC_VERSION.rockspec
 
     - name: Install JSON library
       run: luarocks install dkjson
