@@ -1,0 +1,97 @@
+---
+- name: Setup Development Environment
+  hosts: localhost
+  connection: local
+  become: yes
+  become_method: sudo
+  vars:
+    repo_url: "https://github.com/meetorman/terminal-god.git"
+    config_dir: "{{ ansible_env.HOME }}/.config/nvim"
+
+  tasks:
+    - name: Clone terminal-god repository
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ config_dir }}"
+        version: main
+
+    - name: Create symbolic link for tmux config
+      file:
+        src: "{{ config_dir }}/.tmux.conf"
+        dest: "{{ ansible_env.HOME }}/.tmux.conf"
+        state: link
+
+    - name: Install Homebrew packages
+      community.general.homebrew:
+        name:
+          - tmux
+          - nvim
+          - wget
+          - mercurial
+          - ripgrep
+          - fd
+          - black
+          - isort
+          - stylua
+          - php
+          - julia
+          - composer
+          - rust
+          - go
+          - openjdk
+        state: present
+
+    - name: Download and extract Lua
+      unarchive:
+        src: https://www.lua.org/ftp/lua-5.1.5.tar.gz
+        dest: /tmp
+        remote_src: yes
+
+    - name: Build and install Lua
+      shell:
+        cmd: |
+          cd /tmp/lua-5.1.5
+          make macosx
+          make install
+        creates: /usr/local/bin/lua
+
+    - name: Download and extract LuaRocks
+      unarchive:
+        src: https://luarocks.github.io/luarocks/releases/luarocks-3.11.1.tar.gz
+        dest: /tmp
+        remote_src: yes
+
+    - name: Configure, build, and install LuaRocks
+      shell:
+        cmd: |
+          cd /tmp/luarocks-3.11.1
+          ./configure --with-lua=/usr/local/ --lua-version=5.1
+          make
+          make install
+        creates: /usr/local/bin/luarocks
+
+    - name: Install global npm packages
+      npm:
+        name:
+          - neovim
+          - prettier
+        global: yes
+
+    - name: Create symlink for Java
+      file:
+        src: "{{ ansible_env.HOME }}/homebrew/opt/openjdk/libexec/openjdk.jdk"
+        dest: /Library/Java/JavaVirtualMachines/openjdk.jdk
+        state: link
+
+    - name: Install neovim Python package
+      pip:
+        name: neovim
+        extra_args: --break-system-package
+
+- name: Finalize setup
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Print setup complete message
+      debug:
+        msg: "Setup complete. Please restart your terminal or run 'source ~/.zshrc'"

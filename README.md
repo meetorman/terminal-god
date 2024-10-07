@@ -73,7 +73,7 @@ ln -s ~/.config/nvim/.tmux.conf ~/.tmux.conf
 ## Option 2: Install with ansible (GPT generated/untested)
 
 ```
-ansible-playbook ansible.yml --ask-become-pass
+curl -s https://raw.githubusercontent.com/meetorman/terminal-god/main/ansible.yml | ansible-playbook - --ask-become-pass
 ```
 
 ### Verify installation
