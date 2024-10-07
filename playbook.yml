@@ -15,128 +15,152 @@
       register: user_home
       changed_when: false
 
-    - name: Ensure ~/.config directory exists
+    # - name: Ensure ~/.config directory exists
+    #   file:
+    #     path: "{{ user_home.stdout }}/.config"
+    #     state: directory
+    #     mode: '0755'
+
+    # - name: Remove existing ~/.config/nvim if it exists
+    #   file:
+    #     path: "{{ user_home.stdout }}/.config/nvim"
+    #     state: absent
+
+    # - name: Download terminal-god repository zip
+    #   get_url:
+    #     url: "https://github.com/meetorman/terminal-god/archive/refs/heads/main.zip"
+    #     dest: "/tmp/terminal-god.zip"
+    #     mode: '0644'
+
+    # - name: Ensure unzip is installed
+    #   homebrew:
+    #     name: unzip
+    #     state: present
+    #   become: no
+
+    # - name: Extract terminal-god repository
+    #   unarchive:
+    #     src: "/tmp/terminal-god.zip"
+    #     dest: "/tmp"
+    #     remote_src: yes
+
+    # - name: Move extracted files to ~/.config/nvim
+    #   command: mv /tmp/terminal-god-main "{{ user_home.stdout }}/.config/nvim"
+    #   args:
+    #     creates: "{{ user_home.stdout }}/.config/nvim"
+
+    # - name: Check if ~/.tmux.conf exists
+    #   stat:
+    #     path: "{{ user_home.stdout }}/.tmux.conf"
+    #   register: tmux_conf_stat
+
+    # - name: Backup existing ~/.tmux.conf if it exists
+    #   command: mv "{{ user_home.stdout }}/.tmux.conf" "{{ user_home.stdout }}/.tmux.conf.bak"
+    #   when: tmux_conf_stat.stat.exists and not tmux_conf_stat.stat.islnk
+
+    # - name: Remove existing ~/.tmux.conf symlink if it exists
+    #   file:
+    #     path: "{{ user_home.stdout }}/.tmux.conf"
+    #     state: absent
+    #   when: tmux_conf_stat.stat.exists and tmux_conf_stat.stat.islnk
+
+    # - name: Create symbolic link for tmux config
+    #   file:
+    #     src: "{{ user_home.stdout }}/.config/nvim/.tmux.conf"
+    #     dest: "{{ user_home.stdout }}/.tmux.conf"
+    #     state: link
+
+    # - name: Clean up zip file
+    #   file:
+    #     path: "/tmp/terminal-god.zip"
+    #     state: absent
+
+    # - name: Install Homebrew packages
+    #   community.general.homebrew:
+    #     name:
+    #       - tmux
+    #       - nvim
+    #       - lazygit
+    #       - wget
+    #       - mercurial
+    #       - ripgrep
+    #       - fd
+    #       - black
+    #       - isort
+    #       - stylua
+    #       - php
+    #       - julia
+    #       - composer
+    #       - rust
+    #       - go
+    #       - openjdk
+    #     state: present
+    #   become: no
+
+    # - name: Install GNU tar
+    #   community.general.homebrew:
+    #     name: gnu-tar
+    #     state: present
+    #   become: no
+
+    - name: Create user bin directory
       file:
-        path: "{{ user_home.stdout }}/.config"
+        path: "{{ user_home.stdout }}/.local/bin"
         state: directory
         mode: '0755'
-
-    - name: Remove existing ~/.config/nvim if it exists
-      file:
-        path: "{{ user_home.stdout }}/.config/nvim"
-        state: absent
-
-    - name: Download terminal-god repository zip
-      get_url:
-        url: "https://github.com/meetorman/terminal-god/archive/refs/heads/main.zip"
-        dest: "/tmp/terminal-god.zip"
-        mode: '0644'
-
-    - name: Ensure unzip is installed
-      homebrew:
-        name: unzip
-        state: present
-      become: no
-
-    - name: Extract terminal-god repository
-      unarchive:
-        src: "/tmp/terminal-god.zip"
-        dest: "/tmp"
-        remote_src: yes
-
-    - name: Move extracted files to ~/.config/nvim
-      command: mv /tmp/terminal-god-main "{{ user_home.stdout }}/.config/nvim"
-      args:
-        creates: "{{ user_home.stdout }}/.config/nvim"
-
-    - name: Check if ~/.tmux.conf exists
-      stat:
-        path: "{{ user_home.stdout }}/.tmux.conf"
-      register: tmux_conf_stat
-
-    - name: Backup existing ~/.tmux.conf if it exists
-      command: mv "{{ user_home.stdout }}/.tmux.conf" "{{ user_home.stdout }}/.tmux.conf.bak"
-      when: tmux_conf_stat.stat.exists and not tmux_conf_stat.stat.islnk
-
-    - name: Remove existing ~/.tmux.conf symlink if it exists
-      file:
-        path: "{{ user_home.stdout }}/.tmux.conf"
-        state: absent
-      when: tmux_conf_stat.stat.exists and tmux_conf_stat.stat.islnk
-
-    - name: Create symbolic link for tmux config
-      file:
-        src: "{{ user_home.stdout }}/.config/nvim/.tmux.conf"
-        dest: "{{ user_home.stdout }}/.tmux.conf"
-        state: link
-
-    - name: Clean up zip file
-      file:
-        path: "/tmp/terminal-god.zip"
-        state: absent
-
-    - name: Install Homebrew packages
-      community.general.homebrew:
-        name:
-          - tmux
-          - nvim
-          - lazygit
-          - wget
-          - mercurial
-          - ripgrep
-          - fd
-          - black
-          - isort
-          - stylua
-          - php
-          - julia
-          - composer
-          - rust
-          - go
-          - openjdk
-        state: present
-      become: no
-
-    - name: Install GNU tar
-      community.general.homebrew:
-        name: gnu-tar
-        state: present
-      become: no
 
     - name: Download and extract Lua
       unarchive:
         src: https://www.lua.org/ftp/lua-5.1.5.tar.gz
-        dest: /tmp
+        dest: "/tmp"
         remote_src: yes
-      environment:
-        PATH: /usr/local/opt/gnu-tar/libexec/gnubin:{{ ansible_env.PATH }}
 
-    - name: Build and install Lua
+    - name: Build and install Lua (user-level)
       shell: |
         cd /tmp/lua-5.1.5
-        make macosx
-        make install
+        make linux LOCAL="{{ user_home.stdout }}/.local"
+        make install LOCAL="{{ user_home.stdout }}/.local"
       args:
-        creates: /usr/local/bin/lua
-      become: yes  # Run as root
+        creates: "{{ user_home.stdout }}/.local/bin/lua"
 
     - name: Download and extract LuaRocks
       unarchive:
         src: https://luarocks.github.io/luarocks/releases/luarocks-3.11.1.tar.gz
-        dest: /tmp
+        dest: "/tmp"
         remote_src: yes
-      environment:
-        PATH: /usr/local/opt/gnu-tar/libexec/gnubin:{{ ansible_env.PATH }}
 
-    - name: Configure, build, and install LuaRocks
+    - name: Configure, build, and install LuaRocks (user-level)
       shell: |
         cd /tmp/luarocks-3.11.1
-        ./configure --with-lua=/usr/local/ --lua-version=5.1
-        make
+        ./configure --prefix="{{ user_home.stdout }}/.local" --with-lua="{{ user_home.stdout }}/.local"
+        make build
         make install
       args:
-        creates: /usr/local/bin/luarocks
-      become: yes  # Run as root
+        creates: "{{ user_home.stdout }}/.local/bin/luarocks"
+
+    - name: Install OpenJDK using Homebrew
+      homebrew:
+        name: openjdk
+        state: present
+      become: no
+
+    - name: Create user-level Java directory
+      file:
+        path: "{{ user_home.stdout }}/.local/java"
+        state: directory
+        mode: '0755'
+
+    - name: Create symlink for Java (user-level)
+      file:
+        src: "/opt/homebrew/opt/openjdk/libexec/openjdk.jdk"
+        dest: "{{ user_home.stdout }}/.local/java/openjdk.jdk"
+        state: link
+
+    - name: Add user-level bin and Java to PATH
+      lineinfile:
+        path: "{{ user_home.stdout }}/.zshrc"
+        line: 'export PATH="{{ user_home.stdout }}/.local/bin:{{ user_home.stdout }}/.local/java/openjdk.jdk/Contents/Home/bin:$PATH"'
+        create: yes
 
     - name: Install global npm packages
       npm:
