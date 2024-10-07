@@ -22,12 +22,14 @@ jobs:
     - name: Create rockspec
       run: |
         VERSION=$(git describe --tags --always)
+        ESCAPED_VERSION=$(echo $VERSION | sed 's/[\/&]/\\&/g')
+        ESCAPED_REPO=$(echo $GITHUB_REPOSITORY | sed 's/[\/&]/\\&/g')
         cat > terminal-god-$VERSION.rockspec << 'EOL'
         package = "terminal-god"
-        version = "${VERSION}-1"
+        version = "VERSION_PLACEHOLDER-1"
         source = {
-           url = "git://github.com/${GITHUB_REPOSITORY}",
-           tag = "${VERSION}"
+           url = "git://github.com/REPO_PLACEHOLDER",
+           tag = "VERSION_PLACEHOLDER"
         }
         description = {
            summary = "Terminal God - My Neovim configuration",
@@ -35,7 +37,7 @@ jobs:
               This is a complete Neovim configuration package including all necessary
               plugins and settings for the Terminal God setup.
            ]],
-           homepage = "https://github.com/${GITHUB_REPOSITORY}",
+           homepage = "https://github.com/REPO_PLACEHOLDER",
            license = "MIT"
         }
         dependencies = {
@@ -61,8 +63,8 @@ jobs:
            },
         }
         EOL
-        sed -i "s/\${VERSION}/$VERSION/g" terminal-god-$VERSION.rockspec
-        sed -i "s/\${GITHUB_REPOSITORY}/$GITHUB_REPOSITORY/g" terminal-god-$VERSION.rockspec
+        sed -i "s/VERSION_PLACEHOLDER/$ESCAPED_VERSION/g" terminal-god-$VERSION.rockspec
+        sed -i "s/REPO_PLACEHOLDER/$ESCAPED_REPO/g" terminal-god-$VERSION.rockspec
 
     - name: Build rock
       run: |
