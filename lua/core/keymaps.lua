@@ -19,6 +19,7 @@ end
 wk.add({
   { "<leader>l", name = "Language (LSP)", group = "Language", icon="" }, 
   { "<leader>lb", vim.lsp.buf.format, mode = "n", desc = "Format file", icon="󰉵" },
+  { "<leader>lm", ":RenderMarkdown toggle<cr>", mode = "n", desc = "Markdown", icon="󰉵" },
 
     
   -- Movement and Selection
