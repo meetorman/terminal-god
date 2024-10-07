@@ -5,39 +5,47 @@
   become: yes
   vars:
     repo_url: "https://github.com/meetorman/terminal-god.git"
-    config_dir: "{{ ansible_env.HOME }}/.config/nvim"
 
   tasks:
+
+    - name: Get the user's home directory
+      debug:
+        msg: "{{ ansible_env.HOME }}"
+      register: user_home  # Register the output for later use
+      become: no  # Ensure this runs as the intended user
     - name: Ensure ~/.config directory exists
       file:
-        path: "{{ ansible_env.HOME }}/.config"
+        path: "{{ user_home }}/.config"
         state: directory
         mode: '00755'
+      become: no  # Do not run as root
 
-    - name: Debug config_dir
+    - name: Debug user home directory
       debug:
-        var: config_dir
+        var: user_home
 
     - name: Remove existing ~/.config/nvim if it exists
       file:
-        path: "{{ config_dir }}"
+        path: "{{ user_home }}/.config/nvim"
         state: absent
+      become: no  # Do not run as root
 
     - name: Clone terminal-god repository into ~/.config/nvim
       git:
         repo: "{{ repo_url }}"
-        dest: "{{ config_dir }}"
+        dest: "{{ user_home }}/.config/nvim"
         version: main
-        force: yes  # Force the update if the directory already exists
+        force: yes
+      become: no  # Do not run as root
 
     - name: Create symbolic link for tmux config
       file:
-        src: "{{ config_dir }}/.tmux.conf"
-        dest: "{{ ansible_env.HOME }}/.tmux.conf"
+        src: "{{ user_home }}/.config/nvim/.tmux.conf"
+        dest: "{{ user_home }}/.tmux.conf"
         state: link
+      become: no  # Do not run as root
 
-    - name: Install Homebrew packages (run as non-root)
-      become: no  # Don't use sudo for Homebrew tasks
+    - name: Install Homebrew packages
       community.general.homebrew:
         name:
           - tmux
@@ -56,12 +64,13 @@
           - go
           - openjdk
         state: present
+      become: yes  # Run as root
 
     - name: Install GNU tar
-      become: no
       community.general.homebrew:
         name: gnu-tar
         state: present
+      become: yes  # Run as root
 
     - name: Download and extract Lua
       unarchive:
@@ -78,6 +87,7 @@
         make install
       args:
         creates: /usr/local/bin/lua
+      become: yes  # Run as root
 
     - name: Download and extract LuaRocks
       unarchive:
@@ -95,6 +105,7 @@
         make install
       args:
         creates: /usr/local/bin/luarocks
+      become: yes  # Run as root
 
     - name: Install global npm packages
       npm:
@@ -116,7 +127,7 @@
         dest: /Library/Java/JavaVirtualMachines/openjdk.jdk
         state: link
       when: openjdk_path.stat.exists
-      become: yes
+      become: yes  # Run as root
 
     - name: Check OpenJDK installation path (Intel fallback)
       stat:
@@ -132,7 +143,7 @@
       when: 
         - not openjdk_path.stat.exists
         - openjdk_path_intel.stat.exists
-      become: yes
+      become: yes  # Run as root
 
     - name: Print warning if OpenJDK not found
       debug:
@@ -145,6 +156,7 @@
       pip:
         name: neovim
         extra_args: --break-system-package
+      become: yes  # Run as root
 
 - name: Finalize setup
   hosts: localhost
