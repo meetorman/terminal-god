@@ -32,9 +32,12 @@
         dest: "/tmp/terminal-god"
         version: main
       environment:
-        HTTP_PROXY: "{{ lookup('env', 'HTTP_PROXY') }}"
-        HTTPS_PROXY: "{{ lookup('env', 'HTTPS_PROXY') }}"
-        NO_PROXY: "{{ lookup('env', 'NO_PROXY') }}"
+        http_proxy: "{{ lookup('env', 'http_proxy') | default(lookup('env', 'HTTP_PROXY'), true) }}"
+        https_proxy: "{{ lookup('env', 'https_proxy') | default(lookup('env', 'HTTPS_PROXY'), true) }}"
+        no_proxy: "{{ lookup('env', 'no_proxy') | default(lookup('env', 'NO_PROXY'), true) }}"
+        HTTP_PROXY: "{{ lookup('env', 'HTTP_PROXY') | default(lookup('env', 'http_proxy'), true) }}"
+        HTTPS_PROXY: "{{ lookup('env', 'HTTPS_PROXY') | default(lookup('env', 'https_proxy'), true) }}"
+        NO_PROXY: "{{ lookup('env', 'NO_PROXY') | default(lookup('env', 'no_proxy'), true) }}"
 
     - name: Move terminal-god to ~/.config/nvim
       command: mv /tmp/terminal-god "{{ user_home.stdout }}/.config/nvim"
