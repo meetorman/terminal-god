@@ -50,14 +50,14 @@ jobs:
         build = {
            type = "make",
            install_variables = {
-              INST_CONFDIR = "$HOME/.local/share/nvim"
+              INST_CONFDIR = "\$(LUAROCKS_PREFIX)"
            },
         }
         EOL
         
         # Create Makefile
         cat > Makefile << EOL
-        TERMINAL_GOD_DIR=\$(HOME)/.local/share/nvim
+        TERMINAL_GOD_DIR=\$(INST_CONFDIR)/nvim
 
         install:
         	mkdir -p \$(TERMINAL_GOD_DIR)
@@ -69,7 +69,7 @@ jobs:
 
     - name: Debug information
       run: |
-        echo "Home directory: $HOME"
+        echo "Workspace directory: $GITHUB_WORKSPACE"
         echo "Current directory: $(pwd)"
         echo "Contents of current directory:"
         ls -la
@@ -82,7 +82,7 @@ jobs:
       run: |
         VERSION=$(git describe --tags --always)
         ROCKSPEC_VERSION="${VERSION}-1"
-        luarocks make terminal-god-$ROCKSPEC_VERSION.rockspec --verbose
+        luarocks make terminal-god-$ROCKSPEC_VERSION.rockspec --tree=$GITHUB_WORKSPACE/luarocks --local
 
     - name: Publish to LuaRocks
       env:
