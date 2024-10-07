@@ -145,7 +145,7 @@ Provides menu for key binding reminders
 ![](./readme/which-key-windows.png)
 #### Miscellaneous `k`
 ![](./readme/which-key-z.png)
-#### Telescope `f`
+#### Telescope `<space>f`
 ![](./readme/telescope-which-key.png)
 
 ### telescope
