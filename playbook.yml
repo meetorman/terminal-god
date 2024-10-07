@@ -117,8 +117,8 @@
     - name: Build and install Lua (user-level)
       shell: |
         cd /tmp/lua-5.1.5
-        make macosx LOCAL="{{ user_home.stdout }}/.local"
-        make install LOCAL="{{ user_home.stdout }}/.local"
+        make macosx INSTALL_TOP="{{ user_home.stdout }}/.local"
+        make install INSTALL_TOP="{{ user_home.stdout }}/.local"
       args:
         creates: "{{ user_home.stdout }}/.local/bin/lua"
 
