@@ -151,15 +151,15 @@ Provides menu for key binding reminders
 
 UI for searching files, git files, projects, grep, etc
 - Find files: `<space>ff`
-- Find git files: `<space>fg`
 - Find buffers: `<space>fb`
 - Find help tags: `<space>fh`
-- Find live grep: `<space>fl`
-- Find tags: `<space>ft`
-- Find recent files: `<space>fr`
-- Find word: `<space>fw`
-- Find commands: `<space>fc`
+- Find live grep: `<space>fg`
+- Find current word: `<space>fw`
+- Find references: `<space>fr`
 - Find marks: `<space>fm`
+- Find diagnostics: `<space>fd`
+- Find jump list: `<space>fd`
+![](./readme/telescope-which-key.png)
 
 ### neotree
 <img src="./readme/neotree.png" alt="Neotree" width="300">
