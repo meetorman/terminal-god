@@ -83,10 +83,12 @@
 
     - name: Install global npm packages
       npm:
-        name:
-          - neovim
-          - prettier
+        name: "{{ item }}"
         global: yes
+      loop:
+        - neovim
+        - prettier
+      become: no  # Don't use sudo for npm global installs
 
     - name: Create symlink for Java
       file:
