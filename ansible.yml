@@ -21,7 +21,8 @@
         dest: "{{ ansible_env.HOME }}/.tmux.conf"
         state: link
 
-    - name: Install Homebrew packages
+    - name: Install Homebrew packages (run as non-root)
+      become: no  # Don't use sudo for Homebrew tasks
       community.general.homebrew:
         name:
           - tmux
@@ -95,3 +96,4 @@
     - name: Print setup complete message
       debug:
         msg: "Setup complete. Please restart your terminal or run 'source ~/.zshrc'"
+
