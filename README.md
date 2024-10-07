@@ -48,11 +48,14 @@ cd /tmp
 brew install tmux nvim wget
 wget https://www.lua.org/ftp/lua-5.1.5.tar.gz
 tar zxf lua-5.1.5.tar.gz
-make linuxget https://luarocks.github.io/luarocks/releases/luarocks-3.11.1.tar.gz
+make macosx
+sudo make install
+cd ..
+wget https://luarocks.github.io/luarocks/releases/luarocks-3.11.1.tar.gz
 cd luarocks-3.11.1
 ./configure --with-lua=/usr/local/ --lua-version=5.1
 make
-sudo make install
+sudo make install 
 brew install mercurial ripgrep fd
 npm install -g neovim
 npm install -g prettier
