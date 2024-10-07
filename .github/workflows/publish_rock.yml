@@ -56,6 +56,9 @@ jobs:
         ROCKSPEC_VERSION="${VERSION}-1"
         luarocks make terminal-god-$ROCKSPEC_VERSION.rockspec --local
 
+    - name: Install JSON library
+      run: luarocks install dkjson
+
     - name: Publish to LuaRocks
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
