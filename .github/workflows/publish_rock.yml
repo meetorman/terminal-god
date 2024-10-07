@@ -55,9 +55,8 @@ jobs:
 
     - name: Publish to LuaRocks
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        LUAROCKS_API_KEY: ${{ secrets.GITHUB_TOKEN }}
       run: |
         VERSION="0.1.$(git rev-list --count HEAD)"
         ROCKSPEC_VERSION="${VERSION}-1"
-        luarocks config --local github_token $GITHUB_TOKEN
         luarocks upload terminal-god-$ROCKSPEC_VERSION.rockspec --api-key=github --force --skip-pack
