@@ -22,12 +22,12 @@ jobs:
     - name: Create rockspec
       run: |
         VERSION=$(git describe --tags --always)
-        cat > terminal-god-$VERSION.rockspec << EOL
+        cat > terminal-god-$VERSION.rockspec << 'EOL'
         package = "terminal-god"
-        version = "$VERSION-1"
+        version = "${VERSION}-1"
         source = {
-           url = "git://github.com/${{ github.repository }}",
-           tag = "$VERSION"
+           url = "git://github.com/${GITHUB_REPOSITORY}",
+           tag = "${VERSION}"
         }
         description = {
            summary = "Terminal God - My Neovim configuration",
@@ -35,7 +35,7 @@ jobs:
               This is a complete Neovim configuration package including all necessary
               plugins and settings for the Terminal God setup.
            ]],
-           homepage = "https://github.com/${{ github.repository }}",
+           homepage = "https://github.com/${GITHUB_REPOSITORY}",
            license = "MIT"
         }
         dependencies = {
@@ -45,22 +45,24 @@ jobs:
         build = {
            type = "make",
            build_variables = {
-              CFLAGS="$(CFLAGS)",
-              LIBFLAG="$(LIBFLAG)",
-              LUA_LIBDIR="$(LUA_LIBDIR)",
-              LUA_BINDIR="$(LUA_BINDIR)",
-              LUA_INCDIR="$(LUA_INCDIR)",
-              LUA="$(LUA)",
+              CFLAGS="\$(CFLAGS)",
+              LIBFLAG="\$(LIBFLAG)",
+              LUA_LIBDIR="\$(LUA_LIBDIR)",
+              LUA_BINDIR="\$(LUA_BINDIR)",
+              LUA_INCDIR="\$(LUA_INCDIR)",
+              LUA="\$(LUA)",
            },
            install_variables = {
-              INST_PREFIX="$(PREFIX)",
-              INST_BINDIR="$(BINDIR)",
-              INST_LIBDIR="$(LIBDIR)",
-              INST_LUADIR="$(LUADIR)",
-              INST_CONFDIR="$(CONFDIR)",
+              INST_PREFIX="\$(PREFIX)",
+              INST_BINDIR="\$(BINDIR)",
+              INST_LIBDIR="\$(LIBDIR)",
+              INST_LUADIR="\$(LUADIR)",
+              INST_CONFDIR="\$(CONFDIR)",
            },
         }
         EOL
+        sed -i "s/\${VERSION}/$VERSION/g" terminal-god-$VERSION.rockspec
+        sed -i "s/\${GITHUB_REPOSITORY}/$GITHUB_REPOSITORY/g" terminal-god-$VERSION.rockspec
 
     - name: Build rock
       run: |
