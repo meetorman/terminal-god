@@ -110,25 +110,87 @@
       args:
         creates: "{{ user_home.stdout }}/.local/bin/lua"
 
+    - name: Ensure necessary directories exist
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - "{{ user_home.stdout }}/.local"
+        - "{{ user_home.stdout }}/.local/bin"
+        - "{{ user_home.stdout }}/.local/lib"
+        - "{{ user_home.stdout }}/.local/include"
+        - "{{ user_home.stdout }}/.local/share"
+        - "{{ user_home.stdout }}/.local/share/lua"
+        - "{{ user_home.stdout }}/.local/share/lua/5.1"
+        - "{{ user_home.stdout }}/.local/lib/lua"
+        - "{{ user_home.stdout }}/.local/lib/lua/5.1"
+        - "{{ user_home.stdout }}/.local/etc"
+        - "{{ user_home.stdout }}/.local/etc/luarocks"
+        - "{{ user_home.stdout }}/.luarocks"
+
     - name: Download and extract LuaRocks
       unarchive:
-        src: https://luarocks.github.io/luarocks/releases/luarocks-3.11.1.tar.gz
+        src: https://luarocks.github.io/luarocks/releases/luarocks-3.9.2.tar.gz
         dest: "/tmp"
         remote_src: yes
 
     - name: Configure, build, and install LuaRocks (user-level)
       shell: |
-        cd /tmp/luarocks-3.11.1
+        cd /tmp/luarocks-3.9.2
         ./configure --prefix="{{ user_home.stdout }}/.local" \
                     --with-lua="{{ user_home.stdout }}/.local" \
                     --sysconfdir="{{ user_home.stdout }}/.local/etc/luarocks" \
                     --force-config
         make build
         make install
-        {{ user_home.stdout }}/.local/bin/luarocks config --local lua_dir {{ user_home.stdout }}/.local
-        {{ user_home.stdout }}/.local/bin/luarocks config --local lua_interpreter {{ user_home.stdout }}/.local/bin/lua
+        make bootstrap
       args:
         creates: "{{ user_home.stdout }}/.local/bin/luarocks"
+
+    - name: Create custom LuaRocks configuration
+      copy:
+        dest: "{{ user_home.stdout }}/.luarocks/config-5.1.lua"
+        content: |
+          rocks_trees = {
+            { name = "user", root = "{{ user_home.stdout }}/.local" }
+          }
+          lua_interpreter = "{{ user_home.stdout }}/.local/bin/lua"
+          variables = {
+            LUA_DIR = "{{ user_home.stdout }}/.local",
+            LUA_INCDIR = "{{ user_home.stdout }}/.local/include",
+            LUA_LIBDIR = "{{ user_home.stdout }}/.local/lib",
+            LUA_BINDIR = "{{ user_home.stdout }}/.local/bin",
+          }
+        mode: '0644'
+
+    - name: Set up LuaRocks environment
+      lineinfile:
+        path: "{{ user_home.stdout }}/.zshrc"
+        line: "{{ item }}"
+        create: yes
+      loop:
+        - 'export PATH="{{ user_home.stdout }}/.local/bin:$PATH"'
+        - 'export LUA_PATH="{{ user_home.stdout }}/.local/share/lua/5.1/?.lua;{{ user_home.stdout }}/.local/share/lua/5.1/?/init.lua;{{ user_home.stdout }}/.local/lib/lua/5.1/?.lua;{{ user_home.stdout }}/.local/lib/lua/5.1/?/init.lua;./?.lua;./?/init.lua;;"'
+        - 'export LUA_CPATH="{{ user_home.stdout }}/.local/lib/lua/5.1/?.so;{{ user_home.stdout }}/.local/lib/lua/5.1/loadall.so;./?.so;;"'
+        - 'export LUAROCKS_CONFIG="{{ user_home.stdout }}/.luarocks/config-5.1.lua"'
+
+    - name: Ensure LuaRocks core files are in place
+      copy:
+        src: "/tmp/luarocks-3.9.2/src/luarocks/"
+        dest: "{{ user_home.stdout }}/.local/share/lua/5.1/luarocks/"
+        remote_src: yes
+
+    - name: Check LuaRocks installation
+      shell: |
+        ls -R {{ user_home.stdout }}/.local/share/lua/5.1/luarocks
+        {{ user_home.stdout }}/.local/bin/luarocks --version
+      register: luarocks_check
+      changed_when: false
+
+    - name: Display LuaRocks check result
+      debug:
+        var: luarocks_check.stdout_lines
 
     - name: Install OpenJDK using Homebrew
       homebrew:
