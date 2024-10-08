@@ -4,16 +4,7 @@ return {
         'nvim-tree/nvim-web-devicons',
     },
     config = function()
-        local colors = {
-            red = '#cdd6f4',
-            grey = '#181825',
-            black = '#1e1e2e',
-            white = '#313244',
-            light_green = '#6c7086',
-            orange = '#fab387',
-            green = '#a6e3a1',
-            blue = '#80A7EA',
-        }
+        local colors = require('core.colors')
 
         local theme = {
             normal = {
@@ -32,19 +23,19 @@ return {
                 return " "
             end,
             separator = { left = "", right = "" },
-            color = { bg = "#313244", fg = "#80A7EA" },
+            color = { bg = colors.vim_icons_bg, fg = colors.vim_icons_fg },
         }
 
         local space = {
             function()
                 return " "
             end,
-            color = { bg = colors.black, fg = "#80A7EA" },
+            color = { bg = colors.black, fg = colors.space_fg },
         }
 
         local filename = {
             'filename',
-            color = { bg = "#80A7EA", fg = "#242735" },
+            color = { bg = colors.filename_bg, fg = colors.filename_fg },
             separator = { left = "", right = "" },
         }
 
@@ -52,7 +43,7 @@ return {
             "filetype",
             icon_only = true,
             colored = true,
-            color = { bg = "#313244" },
+            color = { bg = colors.filetype_bg },
             separator = { left = "", right = "" },
         }
 
@@ -60,7 +51,7 @@ return {
             "filetype",
             icon_only = true,
             colored = true,
-            color = { bg = "#313244" },
+            color = { bg = colors.filetype_bg },
         }
 
         local buffer = {}
@@ -74,32 +65,32 @@ return {
                 dos = "󰀵",
                 mac = "󰀵",
             },
-            color = { bg = "#b4befe", fg = "#313244" },
+            color = { bg = colors.fileformat_bg, fg = colors.fileformat_fg },
             separator = { left = "", right = "" },
         }
 
         local encoding = {
             'encoding',
-            color = { bg = "#313244", fg = "#80A7EA" },
+            color = { bg = colors.encoding_bg, fg = colors.encoding_fg },
             separator = { left = "", right = "" },
         }
 
         local branch = {
             'branch',
-            color = { bg = "#a6e3a1", fg = "#313244" },
+            color = { bg = colors.branch_bg, fg = colors.branch_fg },
             separator = { left = "", right = "" },
         }
 
         local diff = {
             "diff",
-            color = { bg = "#313244", fg = "#313244" },
+            color = { bg = colors.diff_bg, fg = colors.diff_fg },
             separator = { left = "", right = "" },
         }
 
         local modes = {
             'mode',
             fmt = function(str) return str:sub(1, 1) end,
-            color = { bg = "#fab387		", fg = "#1e1e2e" },
+            color = { bg = colors.modes_bg, fg = colors.modes_fg },
             separator = { left = "", right = "" },
         }
 
@@ -129,7 +120,7 @@ return {
 
         local dia = {
             'diagnostics',
-            color = { bg = "#313244", fg = "#80A7EA" },
+            color = { bg = colors.dia_bg, fg = colors.dia_fg },
             separator = { left = "", right = "" },
         }
 
@@ -138,7 +129,7 @@ return {
                 return getLspName()
             end,
             separator = { left = "", right = "" },
-            color = { bg = "#f38ba8", fg = "#1e1e2e" },
+            color = { bg = colors.lsp_bg, fg = colors.lsp_fg },
         }
 
         require('lualine').setup {
