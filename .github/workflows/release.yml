@@ -11,41 +11,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Install Neovim
       - name: Install Neovim
         run: |
           sudo apt-get update
-          sudo snap install nvim --classic
+          sudo add-apt-repository ppa:neovim-ppa/unstable -y
+          sudo apt-get update
+          sudo apt-get install -y neovim
 
-      # Step 3: Install dependencies (Python and Node.js)
       - name: Install Python and Node.js
         run: |
-          sudo apt-get install -y python3-pip
+          sudo apt-get install -y python3-pip nodejs npm
 
-      # Step 4: Install Neovim plugins using Lazy.nvim
+      - name: Setup Neovim config
+        run: |
+          mkdir -p ~/.config/nvim
+          cp -r ./* ~/.config/nvim/
+
+      - name: Install Lazy.nvim
+        run: |
+          git clone --filter=blob:none https://github.com/folke/lazy.nvim.git --branch=stable ~/.local/share/nvim/lazy/lazy.nvim
+
       - name: Load Neovim plugins
         run: |
-          nvim --headless "+Lazy! sync" +qall
-        env:
-          HOME: ${{ runner.workspace }}
+          nvim --headless -c "lua require('lazy').sync()" -c "qa"
 
-      # Step 5: Create a Snapshot (lockfile)
       - name: Create a snapshot of installed plugins
         run: |
-          nvim --headless "+Lazy snapshot lazy-lock.json" +qall
-        env:
-          HOME: ${{ runner.workspace }}
+          nvim --headless -c "lua require('lazy').snapshot('lazy-lock.json')" -c "qa"
 
-      # Step 6: Package plugins
       - name: Package plugins
         run: |
-          tar -czvf plugins.tar.gz -C $HOME/.local/share/nvim/lazy .
+          if [ -d "$HOME/.local/share/nvim/lazy" ]; then
+            tar -czvf plugins.tar.gz -C $HOME/.local/share/nvim/lazy .
+          else
+            echo "Plugins directory not found. Skipping packaging."
+            exit 1
+          fi
 
-      # Step 7: Create a release on GitHub
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -57,7 +62,6 @@ jobs:
           draft: false
           prerelease: false
 
-      # Step 8: Upload the snapshot file to the release
       - name: Upload snapshot to release
         uses: actions/upload-release-asset@v1
         env:
@@ -68,7 +72,6 @@ jobs:
           asset_name: "lazy-lock.json"
           asset_content_type: "application/json"
 
-      # Step 9: Upload plugins to release
       - name: Upload plugins to release
         uses: actions/upload-release-asset@v1
         env:
