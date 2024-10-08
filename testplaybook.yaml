@@ -15,6 +15,7 @@
     - "{{ user_home.stdout }}/.local/lib/lua/5.1"
     - "{{ user_home.stdout }}/.local/etc"
     - "{{ user_home.stdout }}/.local/etc/luarocks"
+    - "{{ user_home.stdout }}/.luarocks"
 
 - name: Download and extract LuaRocks
   unarchive:
