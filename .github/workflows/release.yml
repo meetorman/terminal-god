@@ -19,7 +19,7 @@ jobs:
       - name: Install Neovim
         run: |
           sudo apt-get update
-          sudo apt install nvim
+          sudo snap install nvim
 
       # Step 3: Install dependencies (Python and Node.js)
       - name: Install Python and Node.js
