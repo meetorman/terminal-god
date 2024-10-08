@@ -9,6 +9,7 @@
     ansible_python_interpreter: /usr/bin/python3
     github_api_url: "https://api.github.com/repos/meetorman/terminal-god/releases/latest"
     disable_ai: "{{ disable_ai | default(false) }}"
+    disable_github: "{{ disable_github | default(false) }}"
 
   tasks:
     - name: Get the user's home directory
@@ -356,6 +357,10 @@
         src: "{{ user_home.stdout }}/.config/nvim/.tmux.conf"
         dest: "{{ user_home.stdout }}/.tmux.conf"
         state: link
+
+    - name: Switch to secure configuration if specified
+      command: mv "{{ user_home.stdout }}/.config/nvim/lua/core/lazy_secure.lua" "{{ user_home.stdout }}/.config/nvim/lua/core/lazy.lua"
+      when: disable_github | bool
 
     - name: Modify init.lua to disable AI plugins if specified
       lineinfile:
