@@ -122,11 +122,11 @@
         ./configure --prefix="{{ user_home.stdout }}/.local" \
                     --with-lua="{{ user_home.stdout }}/.local" \
                     --sysconfdir="{{ user_home.stdout }}/.local/etc/luarocks" \
-                    --rocks-tree="{{ user_home.stdout }}/.local" \
-                    --lua-version=5.1 \
                     --force-config
         make build
         make install
+        {{ user_home.stdout }}/.local/bin/luarocks config --local lua_dir {{ user_home.stdout }}/.local
+        {{ user_home.stdout }}/.local/bin/luarocks config --local lua_interpreter {{ user_home.stdout }}/.local/bin/lua
       args:
         creates: "{{ user_home.stdout }}/.local/bin/luarocks"
 
@@ -186,9 +186,9 @@
         create: yes
       loop:
         - 'export PATH="{{ user_home.stdout }}/.local/bin:$PATH"'
-        - 'export LUA_PATH="{{ user_home.stdout }}/.local/share/lua/5.1/?.lua;{{ user_home.stdout }}/.local/share/lua/5.1/?/init.lua;{{ user_home.stdout }}/.local/lib/lua/5.1/?.lua;{{ user_home.stdout }}/.local/lib/lua/5.1/?/init.lua;;"'
-        - 'export LUA_CPATH="{{ user_home.stdout }}/.local/lib/lua/5.1/?.so;{{ user_home.stdout }}/.local/lib/lua/5.1/loadall.so;;"'
-        - 'export LUAROCKS_CONFIG="{{ user_home.stdout }}/.local/etc/luarocks/config-5.1.lua"'
+        - 'export LUA_PATH="{{ user_home.stdout }}/.local/share/lua/5.1/?.lua;{{ user_home.stdout }}/.local/share/lua/5.1/?/init.lua;;"'
+        - 'export LUA_CPATH="{{ user_home.stdout }}/.local/lib/lua/5.1/?.so;;"'
+        - 'export LUAROCKS_CONFIG="{{ user_home.stdout }}/.config/luarocks/config-5.1.lua"'
 
     - name: Create custom LuaRocks configuration
       copy:
@@ -209,4 +209,13 @@
           deploy_bin_dir = "{{ user_home.stdout }}/.local/bin"
           deploy_lib_dir = "{{ user_home.stdout }}/.local/lib/lua/5.1"
           deploy_lua_dir = "{{ user_home.stdout }}/.local/share/lua/5.1"
+        mode: '0644'
+
+    - name: Create LuaRocks user config
+      copy:
+        dest: "{{ user_home.stdout }}/.luarocks/config-5.1.lua"
+        content: |
+          rocks_trees = {
+            { name = "user", root = "{{ user_home.stdout }}/.local" }
+          }
         mode: '0644'
