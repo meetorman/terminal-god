@@ -50,5 +50,37 @@ return {
 
         -- Set as default notify function
         vim.notify = notify
+    
+
+        local function notify_recording(status, register)
+            local message
+            if status == "started" then
+                message = string.format('Recording started with register "%s"', register)
+            else
+                message = string.format('Recording ended, replay with @%s', register)
+            end
+            vim.notify(message, "info", {
+                title = "Macro Recording",
+                timeout = 2000,
+            })
+        end
+
+        vim.api.nvim_create_autocmd("RecordingEnter", {
+            callback = function()
+                local register = vim.fn.reg_recording()
+                notify_recording("started", register)
+            end,
+        })
+
+        vim.api.nvim_create_autocmd("RecordingLeave", {
+            callback = function()
+                local register = vim.fn.reg_recording()
+                notify_recording("stopped", register)
+            end,
+        })
+
+
+
+
     end
 }

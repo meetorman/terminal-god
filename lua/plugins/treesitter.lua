@@ -1,4 +1,3 @@
--- Highlight, edit, and navigate code
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
@@ -10,7 +9,6 @@ return {
 		},
 		config = function()
 			require("nvim-treesitter.configs").setup({
-				-- Add languages to be installed here that you want installed for treesitter
 				ensure_installed = {
 					"c", "cpp", "lua", "python", "java", "javascript", "html", "css",
 					"regex", "bash", "markdown", "markdown_inline"
@@ -30,9 +28,8 @@ return {
 				textobjects = {
 					select = {
 						enable = true,
-						lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+						lookahead = true,
 						keymaps = {
-							-- You can use the capture groups defined in textobjects.scm
 							["aa"] = "@parameter.outer",
 							["ia"] = "@parameter.inner",
 							["af"] = "@function.outer",
@@ -43,7 +40,7 @@ return {
 					},
 					move = {
 						enable = true,
-						set_jumps = true, -- whether to set jumps in the jumplist
+						set_jumps = true,
 						goto_next_start = {
 							["]m"] = "@function.outer",
 							["]]"] = "@class.outer",

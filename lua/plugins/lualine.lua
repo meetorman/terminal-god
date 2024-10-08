@@ -1,25 +1,3 @@
-local function get_neotree_info()
-    for _, win in ipairs(vim.api.nvim_list_wins()) do
-        local buf = vim.api.nvim_win_get_buf(win)
-        local ft = vim.api.nvim_buf_get_option(buf, 'filetype')
-        if ft == 'neo-tree' then
-            return true, vim.api.nvim_win_get_width(win)
-        end
-    end
-    return false, 0
-end
-
-local old = {
-    "nvim-lualine/lualine.nvim",
-    config = function()
-        require('lualine').setup({
-            options = {
-                theme = 'dracula'
-            }
-        })
-    end
-}
-
 return {
     'nvim-lualine/lualine.nvim',
     dependencies = {
@@ -92,9 +70,9 @@ return {
         local fileformat = {
             'fileformat',
             symbols = {
-                unix = "󰀵", -- Use an Apple icon for Unix-like systems (including macOS)
-                dos = "󰀵", -- Windows icon
-                mac = "󰀵", -- Alternative macOS icon
+                unix = "󰀵",
+                dos = "󰀵",
+                mac = "󰀵",
             },
             color = { bg = "#b4befe", fg = "#313244" },
             separator = { left = "", right = "" },
@@ -137,14 +115,14 @@ return {
                 local filetypes = client.config.filetypes
                 if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
                     if client.name ~= "null-ls" then
-                        table.insert(lsp_names, 1, client.name)  -- Add non-null-ls clients to the front
+                        table.insert(lsp_names, 1, client.name)
                     else
-                        table.insert(lsp_names, client.name)  -- Add null-ls to the back
+                        table.insert(lsp_names, client.name)
                     end
                 end
             end
             if #lsp_names > 0 then
-                return "  " .. lsp_names[1]  -- Return the first (prioritized) LSP name
+                return "  " .. lsp_names[1]
             end
             return "  " .. msg
         end
@@ -220,28 +198,10 @@ return {
                 lualine_y = {},
                 lualine_z = {}
             },
-            -- Remove the tabline configuration
-            -- tabline = {
-            --     lualine_a = {
-            --         buffer,
-            --     },
-            --     lualine_b = {},
-            --     lualine_c = {},
-            --     lualine_x = {
-            --         tabs,
-            --     },
-            --     lualine_y = {
-            --         space,
-            --     },
-            --     lualine_z = {
-            --     },
-            -- },
             winbar = {},
             inactive_winbar = {},
 
         }
-
-        -- Keep your custom highlight group
         vim.cmd([[
             augroup LualineCustom
                 autocmd!

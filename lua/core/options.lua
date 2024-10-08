@@ -1,10 +1,12 @@
--- Disable Netrw (these are global options)
+-- Disable Netrw (these are global options) I don't think these are doing anything anymore
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_php_provider = 0
 vim.g.loaded_julia_provider = 0
 vim.g.loaded_ruby_provider = 0
+
+
 -- Local options
 local local_opts = {
     shiftwidth = 4,
@@ -31,21 +33,14 @@ local global_opts = {
     pumheight = 10,
 }
 
--- Set local options
+
 for opt, val in pairs(local_opts) do
     vim.opt[opt] = val
 end
 
--- Set global options
 for opt, val in pairs(global_opts) do
     vim.o[opt] = val
 end
 
--- Set other options
 local colorscheme = require("helpers.colorscheme")
 vim.cmd.colorscheme(colorscheme)
-
--- Remove ~ from empty lines
-vim.opt.fillchars = vim.opt.fillchars + { eob = " " }
-
-

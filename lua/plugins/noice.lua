@@ -36,7 +36,6 @@ return {
 
         opts.commands = {
             all = {
-                -- options for the message history that you get with `:Noice`
                 view = "split",
                 opts = { enter = true, format = "details" },
                 filter = {},
@@ -60,13 +59,11 @@ return {
             lsp_doc_border = true
         }
 
-        -- Ensure Noice doesn't override notify
         opts.notify = {
             enabled = true,
             view = "notify",
         }
 
-        -- Correctly configure the LSP utility function overrides
         opts.lsp = {
             override = {
                 ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
