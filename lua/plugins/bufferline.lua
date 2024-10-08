@@ -4,19 +4,7 @@ return {
 	dependencies = "nvim-tree/nvim-web-devicons",
 	config = function()
 		local bufferline = require("bufferline")
-
-		local black = "#45475a"
-		local gray = "#585b70"
-		local red = "#f38ba8"
-		local green = "#a6e3a1"
-		local yellow = "#f9e2af"
-		local blue = "#89b4fa"
-		local magenta = "#f5c2e7"
-		local cyan = "#94e2d5"
-		local white = "#bac2de"
-		local fg = "#cdd6f4"
-		local bg = "#1e1e2e"
-		local links = "#89dceb"
+		local colors = require("core.colors")
 
 		bufferline.setup({
 			options = {
@@ -58,50 +46,50 @@ return {
 			},
 			highlights = {
 				background = {
-					fg = gray,
+					fg = colors.bufferline_gray,
 				},
 				buffer_selected = {
-					fg = links,
+					fg = colors.bufferline_links,
 				},
 				buffer_visible = {
-					fg = gray,
+					fg = colors.bufferline_gray,
 				},
 				diagnostic = {},
 				hint = {
-					fg = cyan,
-					sp = cyan,
+					fg = colors.bufferline_cyan,
+					sp = colors.bufferline_cyan,
 				},
 				hint_selected = {
-					fg = cyan,
-					sp = cyan,
+					fg = colors.bufferline_cyan,
+					sp = colors.bufferline_cyan,
 				},
 				warning = {
-					fg = yellow,
-					sp = yellow,
+					fg = colors.bufferline_yellow,
+					sp = colors.bufferline_yellow,
 				},
 
 				warning_selected = {
-					fg = yellow,
-					sp = yellow,
+					fg = colors.bufferline_yellow,
+					sp = colors.bufferline_yellow,
 				},
 				error = {
-					fg = red,
-					sp = red,
+					fg = colors.bufferline_red,
+					sp = colors.bufferline_red,
 				},
 				error_selected = {
-					fg = red,
-					sp = red,
+					fg = colors.bufferline_red,
+					sp = colors.bufferline_red,
 				},
 				offset_separator = {
-					fg = "#1e1e2e",
-					bg = "#45475a",
+					fg = colors.bufferline_offset_separator_fg,
+					bg = colors.bufferline_offset_separator_bg,
 				},
 			},
 		})
 
 		local function set_hlgroups()
-			vim.api.nvim_set_hl(0, "BufferLineOffsetSeparator", { fg = "#0f0f19", bg = "#0f0f19" })
-			vim.api.nvim_set_hl(0, "BufferLineOffsetText", { fg = "#cdd6f4", bg = "#0f0f19", bold = true })
+			vim.api.nvim_set_hl(0, "BufferLineOffsetSeparator", { fg = colors.bufferline_offset_separator_custom, bg = colors.bufferline_offset_separator_custom })
+			vim.api.nvim_set_hl(0, "BufferLineOffsetText", { fg = colors.bufferline_offset_text_fg, bg = colors.bufferline_offset_text_bg, bold = true })
 		end
 
 		set_hlgroups()

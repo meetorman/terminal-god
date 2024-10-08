@@ -4,18 +4,18 @@ return {
         'nvim-tree/nvim-web-devicons',
     },
     config = function()
-        local colors = require('core.colors')
+        local colors= require('core.colors')
 
         local theme = {
             normal = {
-                a = { fg = colors.black, bg = colors.blue },
-                b = { fg = colors.blue, bg = colors.white },
-                c = { fg = colors.white, bg = colors.black },
-                z = { fg = colors.white, bg = colors.black },
+                a = { fg = colors.lualine_black, bg = colors.lualine_blue },
+                b = { fg = colors.lualine_blue, bg = colors.lualine_white },
+                c = { fg = colors.lualine_white, bg = colors.lualine_black },
+                z = { fg = colors.lualine_white, bg = colors.lualine_black },
             },
-            insert = { a = { fg = colors.black, bg = colors.orange } },
-            visual = { a = { fg = colors.black, bg = colors.green } },
-            replace = { a = { fg = colors.black, bg = colors.green } },
+            insert = { a = { fg = colors.lualine_black, bg = colors.lualine_orange } },
+            visual = { a = { fg = colors.lualine_black, bg = colors.lualine_green } },
+            replace = { a = { fg = colors.lualine_black, bg = colors.lualine_green } },
         }
 
         local vim_icons = {
@@ -23,19 +23,19 @@ return {
                 return " "
             end,
             separator = { left = "", right = "" },
-            color = { bg = colors.vim_icons_bg, fg = colors.vim_icons_fg },
+            color = { bg = colors.lualine_vim_icons_bg, fg = colors.lualine_vim_icons_fg },
         }
 
         local space = {
             function()
                 return " "
             end,
-            color = { bg = colors.black, fg = colors.space_fg },
+            color = { bg = colors.lualine_black, fg = colors.lualine_space_fg },
         }
 
         local filename = {
             'filename',
-            color = { bg = colors.filename_bg, fg = colors.filename_fg },
+            color = { bg = colors.lualine_filename_bg, fg = colors.lualine_filename_fg },
             separator = { left = "", right = "" },
         }
 
@@ -43,7 +43,7 @@ return {
             "filetype",
             icon_only = true,
             colored = true,
-            color = { bg = colors.filetype_bg },
+            color = { bg = colors.lualine_filetype_bg },
             separator = { left = "", right = "" },
         }
 
@@ -51,7 +51,7 @@ return {
             "filetype",
             icon_only = true,
             colored = true,
-            color = { bg = colors.filetype_bg },
+            color = { bg = colors.lualine_filetype_bg },
         }
 
         local buffer = {}
@@ -65,32 +65,32 @@ return {
                 dos = "󰀵",
                 mac = "󰀵",
             },
-            color = { bg = colors.fileformat_bg, fg = colors.fileformat_fg },
+            color = { bg = colors.lualine_fileformat_bg, fg = colors.lualine_fileformat_fg },
             separator = { left = "", right = "" },
         }
 
         local encoding = {
             'encoding',
-            color = { bg = colors.encoding_bg, fg = colors.encoding_fg },
+            color = { bg = colors.lualine_encoding_bg, fg = colors.lualine_encoding_fg },
             separator = { left = "", right = "" },
         }
 
         local branch = {
             'branch',
-            color = { bg = colors.branch_bg, fg = colors.branch_fg },
+            color = { bg = colors.lualine_branch_bg, fg = colors.lualine_branch_fg },
             separator = { left = "", right = "" },
         }
 
         local diff = {
             "diff",
-            color = { bg = colors.diff_bg, fg = colors.diff_fg },
+            color = { bg = colors.lualine_diff_bg, fg = colors.lualine_diff_fg },
             separator = { left = "", right = "" },
         }
 
         local modes = {
             'mode',
             fmt = function(str) return str:sub(1, 1) end,
-            color = { bg = colors.modes_bg, fg = colors.modes_fg },
+            color = { bg = colors.lualine_modes_bg, fg = colors.lualine_modes_fg },
             separator = { left = "", right = "" },
         }
 
@@ -120,7 +120,7 @@ return {
 
         local dia = {
             'diagnostics',
-            color = { bg = colors.dia_bg, fg = colors.dia_fg },
+            color = { bg = colors.lualine_dia_bg, fg = colors.lualine_dia_fg },
             separator = { left = "", right = "" },
         }
 
@@ -129,7 +129,7 @@ return {
                 return getLspName()
             end,
             separator = { left = "", right = "" },
-            color = { bg = colors.lsp_bg, fg = colors.lsp_fg },
+            color = { bg = colors.lualine_lsp_bg, fg = colors.lualine_lsp_fg },
         }
 
         require('lualine').setup {
