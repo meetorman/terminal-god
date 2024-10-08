@@ -21,10 +21,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y neovim
 
-      - name: Install Python and Node.js
-        run: |
-          sudo apt-get install -y python3-pip nodejs npm
-
       - name: Setup Neovim config
         run: |
           mkdir -p ~/.config/nvim
@@ -45,7 +41,10 @@ jobs:
       - name: Switch to secure configuration
         run: |
           mv ~/.config/nvim/lua/core/lazy_secure.lua ~/.config/nvim/lua/core/lazy.lua
-          cp ~/.config/nvim/lua/core/lazy.lua ./lua/core/lazy.lua
+
+      - name: Switch to secure configuration
+        run: |
+          mv lua/core/lazy_secure.lua init.lua
 
       - name: Package plugins
         run: |
@@ -59,9 +58,8 @@ jobs:
       - name: Package configuration
         run: |
           mkdir nvim-config
-          cp -r ./* nvim-config/
-          mkdir -p nvim-config/plugins
-          cp -r $HOME/.local/share/nvim/lazy/* nvim-config/plugins/
+          cp -r ~/.config/nvim nvim-config/
+          cp -r ~/.local/share/nvim/lazy nvim-config/plugins
           tar czf nvim-config.tar.gz nvim-config
 
       - name: Create Release
