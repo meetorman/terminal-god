@@ -25,8 +25,9 @@ jobs:
       - name: Install Python and Node.js
         run: |
           sudo apt-get install -y python3-pip
-          curl -sL install-node.vercel.app/lts | sudo bash
-
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+          . ~/.nvm/nvm.sh
+          nvm install --yes v20.18.0
       # Step 4: Install Neovim plugins using Lazy.nvim
       - name: Load Neovim plugins
         run: |
