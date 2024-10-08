@@ -8,14 +8,12 @@
     config_dir: "{{ ansible_env.HOME }}/.config/nvim"
     ansible_python_interpreter: /usr/bin/python3
     github_api_url: "https://api.github.com/repos/meetorman/terminal-god/releases/latest"
-    disable_ai: "{{ disable_ai | default('false') }}"
-    disable_github: "{{ disable_github | default('false') }}"
 
   tasks:
     - name: Set boolean values for disable flags
       set_fact:
-        disable_ai_bool: "{{ disable_ai | lower == 'true' }}"
-        disable_github_bool: "{{ disable_github | lower == 'true' }}"
+        disable_ai_bool: "{{ (disable_ai | default('false') | string | lower) == 'true' }}"
+        disable_github_bool: "{{ (disable_github | default('false') | string | lower) == 'true' }}"
 
     - name: Get the user's home directory
       command: echo $HOME
@@ -271,14 +269,14 @@
 
     - name: Switch to secure configuration if specified
       command: mv "{{ user_home.stdout }}/.config/nvim/lua/core/lazy_secure.lua" "{{ user_home.stdout }}/.config/nvim/lua/core/lazy.lua"
-      when: disable_github_bool
+      when: disable_github_bool | bool
 
     - name: Modify init.lua to disable AI plugins if specified
       lineinfile:
         path: "{{ user_home.stdout }}/.config/nvim/init.lua"
         regexp: '^-- _G.ignore_plugins = { "copilot", "chatgpt" }'
         line: '_G.ignore_plugins = { "copilot", "chatgpt" }'
-      when: disable_ai_bool
+      when: disable_ai_bool | bool
 
     - name: Print setup complete message
       debug:
