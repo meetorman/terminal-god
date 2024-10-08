@@ -25,7 +25,7 @@ return {
     lualine_dia_fg = '#80A7EA',
     lualine_lsp_bg = '#f38ba8',
     lualine_lsp_fg = '#1e1e2e',
-    -- tabline.lua
+    -- bufferline.lua
     bufferline_black = '#45475a',
     bufferline_gray = '#585b70',
     bufferline_red = '#f38ba8',
