@@ -119,7 +119,10 @@
     - name: Configure, build, and install LuaRocks (user-level)
       shell: |
         cd /tmp/luarocks-3.11.1
-        ./configure --prefix="{{ user_home.stdout }}/.local" --with-lua="{{ user_home.stdout }}/.local" --sysconfdir="{{ user_home.stdout }}/.local/etc/luarocks"
+        ./configure --prefix="{{ user_home.stdout }}/.local" \
+                    --with-lua="{{ user_home.stdout }}/.local" \
+                    --sysconfdir="{{ user_home.stdout }}/.local/etc/luarocks" \
+                    --force-config
         make build
         make install
       args:
@@ -180,6 +183,22 @@
         line: "{{ item }}"
         create: yes
       loop:
+        - 'export PATH="{{ user_home.stdout }}/.local/bin:$PATH"'
         - 'export LUA_PATH="{{ user_home.stdout }}/.local/share/lua/5.1/?.lua;{{ user_home.stdout }}/.local/share/lua/5.1/?/init.lua;;"'
         - 'export LUA_CPATH="{{ user_home.stdout }}/.local/lib/lua/5.1/?.so;;"'
         - 'export LUAROCKS_CONFIG="{{ user_home.stdout }}/.local/etc/luarocks/config-5.1.lua"'
+
+    - name: Create custom LuaRocks configuration
+      copy:
+        dest: "{{ user_home.stdout }}/.local/etc/luarocks/config-5.1.lua"
+        content: |
+          rocks_trees = {
+            { name = "user", root = "{{ user_home.stdout }}/.local" }
+          }
+          lua_interpreter = "{{ user_home.stdout }}/.local/bin/lua"
+          variables = {
+            LUA_DIR = "{{ user_home.stdout }}/.local",
+            LUA_INCDIR = "{{ user_home.stdout }}/.local/include",
+            LUA_LIBDIR = "{{ user_home.stdout }}/.local/lib",
+          }
+        mode: '0644'
