@@ -26,17 +26,6 @@
         path: "{{ user_home.stdout }}/.config/nvim"
         state: absent
 
-    - name: Clone terminal-god repository
-      git:
-        repo: "{{ repo_url }}"
-        dest: "/tmp/terminal-god"
-        version: main
-
-    - name: Move terminal-god to ~/.config/nvim
-      command: mv /tmp/terminal-god "{{ user_home.stdout }}/.config/nvim"
-      args:
-        creates: "{{ user_home.stdout }}/.config/nvim"
-
     - name: Check if ~/.tmux.conf exists
       stat:
         path: "{{ user_home.stdout }}/.tmux.conf"
