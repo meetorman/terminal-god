@@ -1,12 +1,12 @@
 - name: Download and extract LuaRocks
   unarchive:
-    src: https://luarocks.github.io/luarocks/releases/luarocks-3.11.1.tar.gz
+    src: https://luarocks.github.io/luarocks/releases/luarocks-3.9.2.tar.gz
     dest: "/tmp"
     remote_src: yes
 
 - name: Configure, build, and install LuaRocks (user-level)
   shell: |
-    cd /tmp/luarocks-3.11.1
+    cd /tmp/luarocks-3.9.2
     ./configure --prefix="{{ user_home.stdout }}/.local" \
                 --with-lua="{{ user_home.stdout }}/.local" \
                 --sysconfdir="{{ user_home.stdout }}/.local/etc/luarocks" \
@@ -16,24 +16,9 @@
   args:
     creates: "{{ user_home.stdout }}/.local/bin/luarocks"
 
-- name: Configure LuaRocks
-  shell: |
-    {{ user_home.stdout }}/.local/bin/luarocks config --local lua_dir {{ user_home.stdout }}/.local
-    {{ user_home.stdout }}/.local/bin/luarocks config --local lua_interpreter {{ user_home.stdout }}/.local/bin/lua
-    {{ user_home.stdout }}/.local/bin/luarocks path >> {{ user_home.stdout }}/.zshrc
-
-- name: Set up LuaRocks environment
-  lineinfile:
-    path: "{{ user_home.stdout }}/.zshrc"
-    line: "{{ item }}"
-    create: yes
-  loop:
-    - 'export PATH="{{ user_home.stdout }}/.local/bin:$PATH"'
-    - 'eval $(luarocks path --bin)'
-
 - name: Create custom LuaRocks configuration
   copy:
-    dest: "{{ user_home.stdout }}/.luarocks/config-5.1.lua"
+    dest: "{{ user_home.stdout }}/.local/etc/luarocks/config-5.1.lua"
     content: |
       rocks_trees = {
         { name = "user", root = "{{ user_home.stdout }}/.local" }
@@ -46,3 +31,14 @@
         LUA_BINDIR = "{{ user_home.stdout }}/.local/bin",
       }
     mode: '0644'
+
+- name: Set up LuaRocks environment
+  lineinfile:
+    path: "{{ user_home.stdout }}/.zshrc"
+    line: "{{ item }}"
+    create: yes
+  loop:
+    - 'export PATH="{{ user_home.stdout }}/.local/bin:$PATH"'
+    - 'export LUA_PATH="{{ user_home.stdout }}/.local/share/lua/5.1/?.lua;{{ user_home.stdout }}/.local/share/lua/5.1/?/init.lua;;"'
+    - 'export LUA_CPATH="{{ user_home.stdout }}/.local/lib/lua/5.1/?.so;;"'
+    - 'export LUAROCKS_CONFIG="{{ user_home.stdout }}/.local/etc/luarocks/config-5.1.lua"'
