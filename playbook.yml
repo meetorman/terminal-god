@@ -47,12 +47,7 @@
           - rust
           - go
           - openjdk
-        state: present
-      become: no
-
-    - name: Install GNU tar
-      community.general.homebrew:
-        name: gnu-tar
+          - gnu-tar
         state: present
       become: no
 
@@ -117,7 +112,7 @@
 
     - name: Create custom LuaRocks configuration
       copy:
-        dest: "{{ user_home.stdout }}/.luarocks/config-5.1.lua"
+        dest: "{{ user_home.stdout }}/.local/etc/luarocks/config-5.1.lua"
         content: |
           rocks_trees = {
             { name = "user", root = "{{ user_home.stdout }}/.local" }
@@ -128,6 +123,20 @@
             LUA_INCDIR = "{{ user_home.stdout }}/.local/include",
             LUA_LIBDIR = "{{ user_home.stdout }}/.local/lib",
             LUA_BINDIR = "{{ user_home.stdout }}/.local/bin",
+          }
+          lua_version = "5.1"
+          deploy_lua_dir = "{{ user_home.stdout }}/.local"
+          deploy_bin_dir = "{{ user_home.stdout }}/.local/bin"
+          deploy_lib_dir = "{{ user_home.stdout }}/.local/lib/lua/5.1"
+          deploy_lua_dir = "{{ user_home.stdout }}/.local/share/lua/5.1"
+        mode: '0644'
+
+    - name: Create LuaRocks user config
+      copy:
+        dest: "{{ user_home.stdout }}/.luarocks/config-5.1.lua"
+        content: |
+          rocks_trees = {
+            { name = "user", root = "{{ user_home.stdout }}/.local" }
           }
         mode: '0644'
 
@@ -159,11 +168,6 @@
       debug:
         var: luarocks_check.stdout_lines
 
-    - name: Install OpenJDK using Homebrew
-      homebrew:
-        name: openjdk
-        state: present
-
     - name: Create user-level Java directory
       file:
         path: "{{ user_home.stdout }}/.local/java"
@@ -190,15 +194,13 @@
         - neovim
         - prettier
 
-    - name: Install packaging Python library
+    - name: Install Python packages
       pip:
-        name: packaging
+        name: "{{ item }}"
         extra_args: --user
-
-    - name: Install neovim Python package
-      pip:
-        name: neovim
-        extra_args: --user
+      loop:
+        - packaging
+        - neovim
 
     - name: Get latest release info
       uri:
@@ -221,62 +223,11 @@
         remote_src: yes
       when: source_download is succeeded
 
-    - name: Print setup complete message
-      debug:
-        msg: "Setup complete. Please restart your terminal or run 'source ~/.zshrc'"
-
-    - name: Set up LuaRocks environment
-      lineinfile:
-        path: "{{ user_home.stdout }}/.zshrc"
-        line: "{{ item }}"
-        create: yes
-      loop:
-        - 'export PATH="{{ user_home.stdout }}/.local/bin:$PATH"'
-        - 'export LUA_PATH="{{ user_home.stdout }}/.local/share/lua/5.1/?.lua;{{ user_home.stdout }}/.local/share/lua/5.1/?/init.lua;;"'
-        - 'export LUA_CPATH="{{ user_home.stdout }}/.local/lib/lua/5.1/?.so;;"'
-        - 'export LUAROCKS_CONFIG="{{ user_home.stdout }}/.config/luarocks/config-5.1.lua"'
-
-    - name: Create custom LuaRocks configuration
-      copy:
-        dest: "{{ user_home.stdout }}/.local/etc/luarocks/config-5.1.lua"
-        content: |
-          rocks_trees = {
-            { name = "user", root = "{{ user_home.stdout }}/.local" }
-          }
-          lua_interpreter = "{{ user_home.stdout }}/.local/bin/lua"
-          variables = {
-            LUA_DIR = "{{ user_home.stdout }}/.local",
-            LUA_INCDIR = "{{ user_home.stdout }}/.local/include",
-            LUA_LIBDIR = "{{ user_home.stdout }}/.local/lib",
-            LUA_BINDIR = "{{ user_home.stdout }}/.local/bin",
-          }
-          lua_version = "5.1"
-          deploy_lua_dir = "{{ user_home.stdout }}/.local"
-          deploy_bin_dir = "{{ user_home.stdout }}/.local/bin"
-          deploy_lib_dir = "{{ user_home.stdout }}/.local/lib/lua/5.1"
-          deploy_lua_dir = "{{ user_home.stdout }}/.local/share/lua/5.1"
-        mode: '0644'
-
-    - name: Create LuaRocks user config
-      copy:
-        dest: "{{ user_home.stdout }}/.luarocks/config-5.1.lua"
-        content: |
-          rocks_trees = {
-            { name = "user", root = "{{ user_home.stdout }}/.local" }
-          }
-        mode: '0644'
-
     - name: Ensure ~/.local/share/nvim/lazy directory exists
       file:
         path: "{{ user_home.stdout }}/.local/share/nvim/lazy"
         state: directory
         mode: '0755'
-
-    - name: Get latest release info
-      uri:
-        url: "{{ github_api_url }}"
-        return_content: yes
-      register: github_release
 
     - name: Download plugins.tar.gz
       get_url:
@@ -291,51 +242,6 @@
         dest: "{{ user_home.stdout }}/.local/share/nvim/lazy"
         remote_src: yes
       when: plugins_download is succeeded
-
-    - name: Print setup complete message
-      debug:
-        msg: "Setup complete. Please restart your terminal or run 'source ~/.zshrc'"
-
-    - name: Set up LuaRocks environment
-      lineinfile:
-        path: "{{ user_home.stdout }}/.zshrc"
-        line: "{{ item }}"
-        create: yes
-      loop:
-        - 'export PATH="{{ user_home.stdout }}/.local/bin:$PATH"'
-        - 'export LUA_PATH="{{ user_home.stdout }}/.local/share/lua/5.1/?.lua;{{ user_home.stdout }}/.local/share/lua/5.1/?/init.lua;;"'
-        - 'export LUA_CPATH="{{ user_home.stdout }}/.local/lib/lua/5.1/?.so;;"'
-        - 'export LUAROCKS_CONFIG="{{ user_home.stdout }}/.config/luarocks/config-5.1.lua"'
-
-    - name: Create custom LuaRocks configuration
-      copy:
-        dest: "{{ user_home.stdout }}/.local/etc/luarocks/config-5.1.lua"
-        content: |
-          rocks_trees = {
-            { name = "user", root = "{{ user_home.stdout }}/.local" }
-          }
-          lua_interpreter = "{{ user_home.stdout }}/.local/bin/lua"
-          variables = {
-            LUA_DIR = "{{ user_home.stdout }}/.local",
-            LUA_INCDIR = "{{ user_home.stdout }}/.local/include",
-            LUA_LIBDIR = "{{ user_home.stdout }}/.local/lib",
-            LUA_BINDIR = "{{ user_home.stdout }}/.local/bin",
-          }
-          lua_version = "5.1"
-          deploy_lua_dir = "{{ user_home.stdout }}/.local"
-          deploy_bin_dir = "{{ user_home.stdout }}/.local/bin"
-          deploy_lib_dir = "{{ user_home.stdout }}/.local/lib/lua/5.1"
-          deploy_lua_dir = "{{ user_home.stdout }}/.local/share/lua/5.1"
-        mode: '0644'
-
-    - name: Create LuaRocks user config
-      copy:
-        dest: "{{ user_home.stdout }}/.luarocks/config-5.1.lua"
-        content: |
-          rocks_trees = {
-            { name = "user", root = "{{ user_home.stdout }}/.local" }
-          }
-        mode: '0644'
 
     - name: Check if ~/.tmux.conf exists
       stat:
@@ -368,3 +274,7 @@
         regexp: '^-- _G.ignore_plugins = { "copilot", "chatgpt" }'
         line: '_G.ignore_plugins = { "copilot", "chatgpt" }'
       when: disable_ai | bool
+
+    - name: Print setup complete message
+      debug:
+        msg: "Setup complete. Restart your terminal or run 'source ~/.zshrc' before using nvim"

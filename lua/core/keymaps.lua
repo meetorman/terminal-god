@@ -1,15 +1,6 @@
 local map = require("helpers.keys").map
 local wk = require("which-key")
 
--- These should be reviewed once I'm more comfortable with the vim motions
-vim.keymap.del('n', 'gc')
-vim.keymap.del('n', 'gcc')
-vim.keymap.del('x', 'gc')
-vim.keymap.del('o', 'gc')
-vim.keymap.del('n', 'gx')
-vim.keymap.del('n', 'g%')
--- --------------------------------------------------------------------------
-
 wk.add({
     { "<leader>l", name = "Language (LSP)", group = "Language", icon = "" },
     { "<leader>lb", vim.lsp.buf.format, mode = "n", desc = "Format file", icon = "󰉵" },
