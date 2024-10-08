@@ -122,6 +122,8 @@
         ./configure --prefix="{{ user_home.stdout }}/.local" \
                     --with-lua="{{ user_home.stdout }}/.local" \
                     --sysconfdir="{{ user_home.stdout }}/.local/etc/luarocks" \
+                    --rocks-tree="{{ user_home.stdout }}/.local" \
+                    --lua-version=5.1 \
                     --force-config
         make build
         make install
@@ -184,8 +186,8 @@
         create: yes
       loop:
         - 'export PATH="{{ user_home.stdout }}/.local/bin:$PATH"'
-        - 'export LUA_PATH="{{ user_home.stdout }}/.local/share/lua/5.1/?.lua;{{ user_home.stdout }}/.local/share/lua/5.1/?/init.lua;;"'
-        - 'export LUA_CPATH="{{ user_home.stdout }}/.local/lib/lua/5.1/?.so;;"'
+        - 'export LUA_PATH="{{ user_home.stdout }}/.local/share/lua/5.1/?.lua;{{ user_home.stdout }}/.local/share/lua/5.1/?/init.lua;{{ user_home.stdout }}/.local/lib/lua/5.1/?.lua;{{ user_home.stdout }}/.local/lib/lua/5.1/?/init.lua;;"'
+        - 'export LUA_CPATH="{{ user_home.stdout }}/.local/lib/lua/5.1/?.so;{{ user_home.stdout }}/.local/lib/lua/5.1/loadall.so;;"'
         - 'export LUAROCKS_CONFIG="{{ user_home.stdout }}/.local/etc/luarocks/config-5.1.lua"'
 
     - name: Create custom LuaRocks configuration
@@ -200,5 +202,11 @@
             LUA_DIR = "{{ user_home.stdout }}/.local",
             LUA_INCDIR = "{{ user_home.stdout }}/.local/include",
             LUA_LIBDIR = "{{ user_home.stdout }}/.local/lib",
+            LUA_BINDIR = "{{ user_home.stdout }}/.local/bin",
           }
+          lua_version = "5.1"
+          deploy_lua_dir = "{{ user_home.stdout }}/.local"
+          deploy_bin_dir = "{{ user_home.stdout }}/.local/bin"
+          deploy_lib_dir = "{{ user_home.stdout }}/.local/lib/lua/5.1"
+          deploy_lua_dir = "{{ user_home.stdout }}/.local/share/lua/5.1"
         mode: '0644'
