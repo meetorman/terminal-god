@@ -26,32 +26,6 @@
         path: "{{ user_home.stdout }}/.config/nvim"
         state: absent
 
-    - name: Check if ~/.tmux.conf exists
-      stat:
-        path: "{{ user_home.stdout }}/.tmux.conf"
-      register: tmux_conf_stat
-
-    - name: Backup existing ~/.tmux.conf if it exists
-      command: mv "{{ user_home.stdout }}/.tmux.conf" "{{ user_home.stdout }}/.tmux.conf.bak"
-      when: tmux_conf_stat.stat.exists and not tmux_conf_stat.stat.islnk
-
-    - name: Remove existing ~/.tmux.conf symlink if it exists
-      file:
-        path: "{{ user_home.stdout }}/.tmux.conf"
-        state: absent
-      when: tmux_conf_stat.stat.exists and tmux_conf_stat.stat.islnk
-
-    - name: Create symbolic link for tmux config
-      file:
-        src: "{{ user_home.stdout }}/.config/nvim/.tmux.conf"
-        dest: "{{ user_home.stdout }}/.tmux.conf"
-        state: link
-
-    - name: Clean up zip file
-      file:
-        path: "/tmp/terminal-god.zip"
-        state: absent
-
     - name: Install Homebrew packages
       community.general.homebrew:
         name:
@@ -359,3 +333,24 @@
             { name = "user", root = "{{ user_home.stdout }}/.local" }
           }
         mode: '0644'
+
+    - name: Check if ~/.tmux.conf exists
+      stat:
+        path: "{{ user_home.stdout }}/.tmux.conf"
+      register: tmux_conf_stat
+
+    - name: Backup existing ~/.tmux.conf if it exists
+      command: mv "{{ user_home.stdout }}/.tmux.conf" "{{ user_home.stdout }}/.tmux.conf.bak"
+      when: tmux_conf_stat.stat.exists and not tmux_conf_stat.stat.islnk
+
+    - name: Remove existing ~/.tmux.conf symlink if it exists
+      file:
+        path: "{{ user_home.stdout }}/.tmux.conf"
+        state: absent
+      when: tmux_conf_stat.stat.exists and tmux_conf_stat.stat.islnk
+
+    - name: Create symbolic link for tmux config
+      file:
+        src: "{{ user_home.stdout }}/.config/nvim/.tmux.conf"
+        dest: "{{ user_home.stdout }}/.tmux.conf"
+        state: link
