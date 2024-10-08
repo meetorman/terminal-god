@@ -1,0 +1,292 @@
+---
+- name: Setup Development Environment
+  hosts: localhost
+  connection: local
+  become: no
+  vars:
+    repo_url: "https://github.com/meetorman/terminal-god.git"
+    config_dir: "{{ ansible_env.HOME }}/.config/nvim"
+    ansible_python_interpreter: /usr/bin/python3
+    github_api_url: "https://api.github.com/repos/meetorman/terminal-god/releases/latest"
+
+  tasks:
+    - name: Set boolean values for disable flags
+      set_fact:
+        disable_ai_bool: "{{ (disable_ai | default('false') | string | lower) == 'true' }}"
+        disable_github_bool: "{{ (disable_github | default('false') | string | lower) == 'true' }}"
+
+    - name: Get the user's home directory
+      command: echo $HOME
+      register: user_home
+      changed_when: false
+
+    - name: Ensure ~/.config directory exists
+      file:
+        path: "{{ user_home.stdout }}/.config"
+        state: directory
+        mode: '0755'
+
+    - name: Remove existing ~/.config/nvim if it exists
+      file:
+        path: "{{ user_home.stdout }}/.config/nvim"
+        state: absent
+
+    - name: Install Homebrew packages
+      community.general.homebrew:
+        name:
+          - tmux
+          - nvim
+          - lazygit
+          - wget
+          - mercurial
+          - ripgrep
+          - fd
+          - black
+          - isort
+          - stylua
+          - php
+          - julia
+          - composer
+          - rust
+          - go
+          - openjdk
+          - gnu-tar
+        state: present
+      become: no
+
+    - name: Create user bin directory
+      file:
+        path: "{{ user_home.stdout }}/.local/bin"
+        state: directory
+        mode: '0755'
+
+    - name: Download and extract Lua
+      unarchive:
+        src: https://www.lua.org/ftp/lua-5.1.5.tar.gz
+        dest: "/tmp"
+        remote_src: yes
+
+    - name: Build and install Lua (user-level)
+      shell: |
+        cd /tmp/lua-5.1.5
+        make macosx INSTALL_TOP="{{ user_home.stdout }}/.local"
+        make install INSTALL_TOP="{{ user_home.stdout }}/.local"
+      args:
+        creates: "{{ user_home.stdout }}/.local/bin/lua"
+
+    - name: Set Lua environment variables
+      lineinfile:
+        path: "{{ user_home.stdout }}/.zshrc"
+        line: "{{ item }}"
+        create: yes
+      loop:
+        - 'export PATH="{{ user_home.stdout }}/.local/bin:$PATH"'
+        - 'export LUA_PATH="{{ user_home.stdout }}/.local/share/lua/5.1/?.lua;{{ user_home.stdout }}/.local/share/lua/5.1/?/init.lua;{{ user_home.stdout }}/.local/lib/lua/5.1/?.lua;{{ user_home.stdout }}/.local/lib/lua/5.1/?/init.lua;./?.lua;./?/init.lua;;"'
+        - 'export LUA_CPATH="{{ user_home.stdout }}/.local/lib/lua/5.1/?.so;{{ user_home.stdout }}/.local/lib/lua/5.1/loadall.so;./?.so;;"'
+
+    - name: Ensure necessary directories exist
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - "{{ user_home.stdout }}/.local"
+        - "{{ user_home.stdout }}/.local/bin"
+        - "{{ user_home.stdout }}/.local/lib"
+        - "{{ user_home.stdout }}/.local/include"
+        - "{{ user_home.stdout }}/.local/share"
+        - "{{ user_home.stdout }}/.local/share/lua"
+        - "{{ user_home.stdout }}/.local/share/lua/5.1"
+        - "{{ user_home.stdout }}/.local/lib/lua"
+        - "{{ user_home.stdout }}/.local/lib/lua/5.1"
+        - "{{ user_home.stdout }}/.local/etc"
+        - "{{ user_home.stdout }}/.local/etc/luarocks"
+        - "{{ user_home.stdout }}/.luarocks"
+        - "{{ user_home.stdout }}/.config/nvim"
+
+    - name: Download and extract LuaRocks
+      unarchive:
+        src: https://luarocks.github.io/luarocks/releases/luarocks-3.9.2.tar.gz
+        dest: "/tmp"
+        remote_src: yes
+
+    - name: Configure, build, and install LuaRocks (user-level)
+      shell: |
+        cd /tmp/luarocks-3.9.2
+        ./configure --prefix="{{ user_home.stdout }}/.local" \
+                    --with-lua="{{ user_home.stdout }}/.local" \
+                    --sysconfdir="{{ user_home.stdout }}/.local/etc/luarocks" \
+                    --force-config
+        make build
+        make install
+        make bootstrap
+      args:
+        creates: "{{ user_home.stdout }}/.local/bin/luarocks"
+
+    - name: Create custom LuaRocks configuration
+      copy:
+        dest: "{{ user_home.stdout }}/.local/etc/luarocks/config-5.1.lua"
+        content: |
+          rocks_trees = {
+            { name = "user", root = "{{ user_home.stdout }}/.local" }
+          }
+          lua_interpreter = "{{ user_home.stdout }}/.local/bin/lua"
+          variables = {
+            LUA_DIR = "{{ user_home.stdout }}/.local",
+            LUA_INCDIR = "{{ user_home.stdout }}/.local/include",
+            LUA_LIBDIR = "{{ user_home.stdout }}/.local/lib",
+            LUA_BINDIR = "{{ user_home.stdout }}/.local/bin",
+          }
+          lua_version = "5.1"
+          deploy_lua_dir = "{{ user_home.stdout }}/.local"
+          deploy_bin_dir = "{{ user_home.stdout }}/.local/bin"
+          deploy_lib_dir = "{{ user_home.stdout }}/.local/lib/lua/5.1"
+          deploy_lua_dir = "{{ user_home.stdout }}/.local/share/lua/5.1"
+        mode: '0644'
+
+    - name: Create LuaRocks user config
+      copy:
+        dest: "{{ user_home.stdout }}/.luarocks/config-5.1.lua"
+        content: |
+          rocks_trees = {
+            { name = "user", root = "{{ user_home.stdout }}/.local" }
+          }
+        mode: '0644'
+
+    - name: Set up LuaRocks environment
+      lineinfile:
+        path: "{{ user_home.stdout }}/.zshrc"
+        line: 'export LUAROCKS_CONFIG="{{ user_home.stdout }}/.local/etc/luarocks/config-5.1.lua"'
+        create: yes
+
+    - name: Ensure LuaRocks core files are in place
+      copy:
+        src: "/tmp/luarocks-3.9.2/src/luarocks/"
+        dest: "{{ user_home.stdout }}/.local/share/lua/5.1/luarocks/"
+        remote_src: yes
+
+    - name: Check LuaRocks installation
+      shell: |
+        ls -R {{ user_home.stdout }}/.local/share/lua/5.1/luarocks
+        {{ user_home.stdout }}/.local/bin/luarocks --version
+      register: luarocks_check
+      changed_when: false
+
+    - name: Display LuaRocks check result
+      debug:
+        var: luarocks_check.stdout_lines
+
+    - name: Create user-level Java directory
+      file:
+        path: "{{ user_home.stdout }}/.local/java"
+        state: directory
+        mode: '0755'
+
+    - name: Create symlink for Java (user-level)
+      file:
+        src: "/opt/homebrew/opt/openjdk/libexec/openjdk.jdk"
+        dest: "{{ user_home.stdout }}/.local/java/openjdk.jdk"
+        state: link
+
+    - name: Add user-level bin and Java to PATH
+      lineinfile:
+        path: "{{ user_home.stdout }}/.zshrc"
+        line: 'export PATH="{{ user_home.stdout }}/.local/bin:{{ user_home.stdout }}/.local/java/openjdk.jdk/Contents/Home/bin:$PATH"'
+        create: yes
+
+    - name: Install global npm packages
+      npm:
+        name: "{{ item }}"
+        global: yes
+      loop:
+        - neovim
+        - prettier
+
+    - name: Install Python packages
+      pip:
+        name: "{{ item }}"
+        extra_args: --user
+      loop:
+        - packaging
+        - neovim
+
+    - name: Get latest release info
+      uri:
+        url: "{{ github_api_url }}"
+        return_content: yes
+      register: github_release
+
+    - name: Download source code (tar.gz)
+      get_url:
+        url: "{{ github_release.json.tarball_url }}"
+        dest: "/tmp/source.tar.gz"
+        mode: '0644'
+      register: source_download
+
+    - name: Extract source code
+      unarchive:
+        src: "/tmp/source.tar.gz"
+        dest: "{{ user_home.stdout }}/.config/nvim"
+        extra_opts: [--strip-components=1]
+        remote_src: yes
+      when: source_download is succeeded
+
+    - name: Ensure ~/.local/share/nvim/lazy directory exists
+      file:
+        path: "{{ user_home.stdout }}/.local/share/nvim/lazy"
+        state: directory
+        mode: '0755'
+
+    - name: Download plugins.tar.gz
+      get_url:
+        url: "{{ github_release.json.assets | selectattr('name', 'equalto', 'plugins.tar.gz') | map(attribute='browser_download_url') | first }}"
+        dest: "/tmp/plugins.tar.gz"
+        mode: '0644'
+      register: plugins_download
+
+    - name: Extract plugins
+      unarchive:
+        src: "/tmp/plugins.tar.gz"
+        dest: "{{ user_home.stdout }}/.local/share/nvim/lazy"
+        remote_src: yes
+      when: plugins_download is succeeded
+
+    - name: Check if ~/.tmux.conf exists
+      stat:
+        path: "{{ user_home.stdout }}/.tmux.conf"
+      register: tmux_conf_stat
+
+    - name: Backup existing ~/.tmux.conf if it exists
+      command: mv "{{ user_home.stdout }}/.tmux.conf" "{{ user_home.stdout }}/.tmux.conf.bak"
+      when: tmux_conf_stat.stat.exists and not tmux_conf_stat.stat.islnk
+
+    - name: Remove existing ~/.tmux.conf symlink if it exists
+      file:
+        path: "{{ user_home.stdout }}/.tmux.conf"
+        state: absent
+      when: tmux_conf_stat.stat.exists and tmux_conf_stat.stat.islnk
+
+    - name: Create symbolic link for tmux config
+      file:
+        src: "{{ user_home.stdout }}/.config/nvim/.tmux.conf"
+        dest: "{{ user_home.stdout }}/.tmux.conf"
+        state: link
+
+    - name: Switch to secure configuration if specified
+      command: mv "{{ user_home.stdout }}/.config/nvim/lua/core/lazy_secure.lua" "{{ user_home.stdout }}/.config/nvim/lua/core/lazy.lua"
+      when: disable_github_bool | bool
+
+    - name: Modify init.lua to disable AI plugins if specified
+      lineinfile:
+        path: "{{ user_home.stdout }}/.config/nvim/init.lua"
+        regexp: '^-- _G.ignore_plugins = { "copilot", "chatgpt" }'
+        line: '_G.ignore_plugins = { "copilot", "chatgpt" }'
+      when: disable_ai_bool | bool
+
+- name: Finalize setup
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Print setup complete message
+      debug:
+        msg: "Setup complete. Please restart your terminal or run 'source ~/.zshrc'"
