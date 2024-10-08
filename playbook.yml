@@ -119,7 +119,7 @@
     - name: Configure, build, and install LuaRocks (user-level)
       shell: |
         cd /tmp/luarocks-3.11.1
-        ./configure --prefix="{{ user_home.stdout }}/.local" --with-lua="{{ user_home.stdout }}/.local"
+        ./configure --prefix="{{ user_home.stdout }}/.local" --with-lua="{{ user_home.stdout }}/.local" --sysconfdir="{{ user_home.stdout }}/.local/etc/luarocks"
         make build
         make install
       args:
@@ -173,3 +173,13 @@
     - name: Print setup complete message
       debug:
         msg: "Setup complete. Please restart your terminal or run 'source ~/.zshrc'"
+
+    - name: Set up LuaRocks environment
+      lineinfile:
+        path: "{{ user_home.stdout }}/.zshrc"
+        line: "{{ item }}"
+        create: yes
+      loop:
+        - 'export LUA_PATH="{{ user_home.stdout }}/.local/share/lua/5.1/?.lua;{{ user_home.stdout }}/.local/share/lua/5.1/?/init.lua;;"'
+        - 'export LUA_CPATH="{{ user_home.stdout }}/.local/lib/lua/5.1/?.so;;"'
+        - 'export LUAROCKS_CONFIG="{{ user_home.stdout }}/.local/etc/luarocks/config-5.1.lua"'
