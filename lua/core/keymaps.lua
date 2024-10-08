@@ -13,7 +13,6 @@ vim.keymap.del('n', 'g%')
 wk.add({
     { "<leader>l", name = "Language (LSP)", group = "Language", icon = "" },
     { "<leader>lb", vim.lsp.buf.format, mode = "n", desc = "Format file", icon = "󰉵" },
-    { "<leader>lm", ":RenderMarkdown toggle<cr>", mode = "n", desc = "Markdown", icon = "󰉵" },
     { "J", ":m '>+1<CR>gv=gv", mode = "v", desc = "Move selected lines down" },
     { "K", ":m '<-2<CR>gv=gv", mode = "v", desc = "Move selected lines up" },
     { "<C-u>", "<C-u>zz", mode = "n", desc = "Scroll up and center" },
