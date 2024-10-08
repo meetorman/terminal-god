@@ -8,6 +8,7 @@
     config_dir: "{{ ansible_env.HOME }}/.config/nvim"
     ansible_python_interpreter: /usr/bin/python3
     github_api_url: "https://api.github.com/repos/meetorman/terminal-god/releases/latest"
+    disable_ai: "{{ disable_ai | default(false) }}"
 
   tasks:
     - name: Get the user's home directory
@@ -92,6 +93,7 @@
         - "{{ user_home.stdout }}/.local/etc"
         - "{{ user_home.stdout }}/.local/etc/luarocks"
         - "{{ user_home.stdout }}/.luarocks"
+        - "{{ user_home.stdout }}/.config/nvim"
 
     - name: Download and extract LuaRocks
       unarchive:
@@ -354,3 +356,10 @@
         src: "{{ user_home.stdout }}/.config/nvim/.tmux.conf"
         dest: "{{ user_home.stdout }}/.tmux.conf"
         state: link
+
+    - name: Modify init.lua to disable AI plugins if specified
+      lineinfile:
+        path: "{{ user_home.stdout }}/.config/nvim/init.lua"
+        regexp: '^-- _G.ignore_plugins = { "copilot", "chatgpt" }'
+        line: '_G.ignore_plugins = { "copilot", "chatgpt" }'
+      when: disable_ai | bool
