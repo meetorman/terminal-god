@@ -7,6 +7,7 @@
     repo_url: "https://github.com/meetorman/terminal-god.git"
     config_dir: "{{ ansible_env.HOME }}/.config/nvim"
     ansible_python_interpreter: /usr/bin/python3
+    github_api_url: "https://api.github.com/repos/meetorman/terminal-god/releases/latest"
 
   tasks:
     - name: Get the user's home directory
@@ -233,10 +234,98 @@
         name: neovim
         extra_args: --user
 
-- name: Finalize setup
-  hosts: localhost
-  connection: local
-  tasks:
+    - name: Get latest release info
+      uri:
+        url: "{{ github_api_url }}"
+        return_content: yes
+      register: github_release
+
+    - name: Download source code (tar.gz)
+      get_url:
+        url: "{{ github_release.json.tarball_url }}"
+        dest: "/tmp/source.tar.gz"
+        mode: '0644'
+      register: source_download
+
+    - name: Extract source code
+      unarchive:
+        src: "/tmp/source.tar.gz"
+        dest: "{{ user_home.stdout }}/.config/nvim"
+        extra_opts: [--strip-components=1]
+        remote_src: yes
+      when: source_download is succeeded
+
+    - name: Print setup complete message
+      debug:
+        msg: "Setup complete. Please restart your terminal or run 'source ~/.zshrc'"
+
+    - name: Set up LuaRocks environment
+      lineinfile:
+        path: "{{ user_home.stdout }}/.zshrc"
+        line: "{{ item }}"
+        create: yes
+      loop:
+        - 'export PATH="{{ user_home.stdout }}/.local/bin:$PATH"'
+        - 'export LUA_PATH="{{ user_home.stdout }}/.local/share/lua/5.1/?.lua;{{ user_home.stdout }}/.local/share/lua/5.1/?/init.lua;;"'
+        - 'export LUA_CPATH="{{ user_home.stdout }}/.local/lib/lua/5.1/?.so;;"'
+        - 'export LUAROCKS_CONFIG="{{ user_home.stdout }}/.config/luarocks/config-5.1.lua"'
+
+    - name: Create custom LuaRocks configuration
+      copy:
+        dest: "{{ user_home.stdout }}/.local/etc/luarocks/config-5.1.lua"
+        content: |
+          rocks_trees = {
+            { name = "user", root = "{{ user_home.stdout }}/.local" }
+          }
+          lua_interpreter = "{{ user_home.stdout }}/.local/bin/lua"
+          variables = {
+            LUA_DIR = "{{ user_home.stdout }}/.local",
+            LUA_INCDIR = "{{ user_home.stdout }}/.local/include",
+            LUA_LIBDIR = "{{ user_home.stdout }}/.local/lib",
+            LUA_BINDIR = "{{ user_home.stdout }}/.local/bin",
+          }
+          lua_version = "5.1"
+          deploy_lua_dir = "{{ user_home.stdout }}/.local"
+          deploy_bin_dir = "{{ user_home.stdout }}/.local/bin"
+          deploy_lib_dir = "{{ user_home.stdout }}/.local/lib/lua/5.1"
+          deploy_lua_dir = "{{ user_home.stdout }}/.local/share/lua/5.1"
+        mode: '0644'
+
+    - name: Create LuaRocks user config
+      copy:
+        dest: "{{ user_home.stdout }}/.luarocks/config-5.1.lua"
+        content: |
+          rocks_trees = {
+            { name = "user", root = "{{ user_home.stdout }}/.local" }
+          }
+        mode: '0644'
+
+    - name: Ensure ~/.local/share/nvim/lazy directory exists
+      file:
+        path: "{{ user_home.stdout }}/.local/share/nvim/lazy"
+        state: directory
+        mode: '0755'
+
+    - name: Get latest release info
+      uri:
+        url: "{{ github_api_url }}"
+        return_content: yes
+      register: github_release
+
+    - name: Download plugins.tar.gz
+      get_url:
+        url: "{{ github_release.json.assets | selectattr('name', 'equalto', 'plugins.tar.gz') | map(attribute='browser_download_url') | first }}"
+        dest: "/tmp/plugins.tar.gz"
+        mode: '0644'
+      register: plugins_download
+
+    - name: Extract plugins
+      unarchive:
+        src: "/tmp/plugins.tar.gz"
+        dest: "{{ user_home.stdout }}/.local/share/nvim/lazy"
+        remote_src: yes
+      when: plugins_download is succeeded
+
     - name: Print setup complete message
       debug:
         msg: "Setup complete. Please restart your terminal or run 'source ~/.zshrc'"
