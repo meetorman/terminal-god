@@ -26,10 +26,7 @@ jobs:
         run: |
           sudo apt-get install -y python3-pip
 
- 
-
-
-        # Step 4: Install Neovim plugins using Lazy.nvim
+      # Step 4: Install Neovim plugins using Lazy.nvim
       - name: Load Neovim plugins
         run: |
           nvim --headless "+Lazy! sync" +qall
@@ -43,7 +40,12 @@ jobs:
         env:
           HOME: ${{ runner.workspace }}
 
-      # Step 6: Create a release on GitHub
+      # Step 6: Package plugins
+      - name: Package plugins
+        run: |
+          tar -czvf plugins.tar.gz -C $HOME/.local/share/nvim/lazy .
+
+      # Step 7: Create a release on GitHub
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -55,7 +57,7 @@ jobs:
           draft: false
           prerelease: false
 
-      # Step 7: Upload the snapshot file to the release
+      # Step 8: Upload the snapshot file to the release
       - name: Upload snapshot to release
         uses: actions/upload-release-asset@v1
         env:
@@ -65,4 +67,15 @@ jobs:
           asset_path: "./lazy-lock.json"
           asset_name: "lazy-lock.json"
           asset_content_type: "application/json"
+
+      # Step 9: Upload plugins to release
+      - name: Upload plugins to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: "./plugins.tar.gz"
+          asset_name: "plugins.tar.gz"
+          asset_content_type: "application/gzip"
 
