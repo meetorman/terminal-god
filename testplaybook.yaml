@@ -1,3 +1,21 @@
+- name: Ensure necessary directories exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ user_home.stdout }}/.local"
+    - "{{ user_home.stdout }}/.local/bin"
+    - "{{ user_home.stdout }}/.local/lib"
+    - "{{ user_home.stdout }}/.local/include"
+    - "{{ user_home.stdout }}/.local/share"
+    - "{{ user_home.stdout }}/.local/share/lua"
+    - "{{ user_home.stdout }}/.local/share/lua/5.1"
+    - "{{ user_home.stdout }}/.local/lib/lua"
+    - "{{ user_home.stdout }}/.local/lib/lua/5.1"
+    - "{{ user_home.stdout }}/.local/etc"
+    - "{{ user_home.stdout }}/.local/etc/luarocks"
+
 - name: Download and extract LuaRocks
   unarchive:
     src: https://luarocks.github.io/luarocks/releases/luarocks-3.9.2.tar.gz
@@ -13,6 +31,7 @@
                 --force-config
     make build
     make install
+    make bootstrap
   args:
     creates: "{{ user_home.stdout }}/.local/bin/luarocks"
 
