@@ -39,41 +39,6 @@
 curl -sL https://raw.githubusercontent.com/meetorman/terminal-god/main/playbook.yml | ansible-playbook -i localhost, /dev/stdin
 ```
 
-### Option 2: Install manually
-
-#### Install dependencies
-
-```
-cd /tmp
-brew install tmux nvim wget
-wget https://www.lua.org/ftp/lua-5.1.5.tar.gz
-tar zxf lua-5.1.5.tar.gz
-make macosx
-sudo make install
-cd ..
-wget https://luarocks.github.io/luarocks/releases/luarocks-3.11.1.tar.gz
-cd luarocks-3.11.1
-./configure --with-lua=/usr/local/ --lua-version=5.1
-make
-sudo make install 
-brew install mercurial ripgrep fd
-npm install -g neovim
-npm install -g prettier
-brew install black isort stylua
-brew install php julia composer rust go openjdk
-sudo ln -sfn $(brew --prefix)/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
-pip3 install neovim  --break-system-package
-```
-
-
-
-#### Clone repo and install plugins
-```
-git clone https://github.com/meetorman/terminal-god.git
-mv terminal-god ~/.config/nvim
-ln -s ~/.config/nvim/.tmux.conf ~/.tmux.conf
-```
-
 ## Verify installation
 Run `nvim` and command `:checkhealth` to verify installation without errors.
 
@@ -296,3 +261,38 @@ The power of Vim comes from combining operators with motions or text objects. Fo
 - `.`: Repeat the last change
 - `u`: Undo the last change
 - `Ctrl + r`: Redo the last undone change
+
+### Manual Install
+
+#### Install dependencies
+
+```
+cd /tmp
+brew install tmux nvim wget
+wget https://www.lua.org/ftp/lua-5.1.5.tar.gz
+tar zxf lua-5.1.5.tar.gz
+make macosx
+sudo make install
+cd ..
+wget https://luarocks.github.io/luarocks/releases/luarocks-3.11.1.tar.gz
+cd luarocks-3.11.1
+./configure --with-lua=/usr/local/ --lua-version=5.1
+make
+sudo make install 
+brew install mercurial ripgrep fd
+npm install -g neovim
+npm install -g prettier
+brew install black isort stylua
+brew install php julia composer rust go openjdk
+sudo ln -sfn $(brew --prefix)/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
+pip3 install neovim  --break-system-package
+```
+
+
+
+#### Clone repo and install plugins
+```
+git clone https://github.com/meetorman/terminal-god.git
+mv terminal-god ~/.config/nvim
+ln -s ~/.config/nvim/.tmux.conf ~/.tmux.conf
+```
