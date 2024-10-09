@@ -49,10 +49,20 @@ wk.add({
     { "<leader>g", "<cmd>Neogit<cr>", mode = "n", desc = "Git", icon = "" },
     { "<leader>t", group = "Tabs", icon = "󰓩" },
     { "<leader>tn", "<cmd>tabNext<cr>", mode = "n", desc = "Next Tab", icon = "󰌒" },
+    { "<leader>tt", "<cmd>tabNext<cr>", mode = "n", desc = "Tab Next", icon = "󰌒" },
     { "<leader>tp", "<cmd>tabprevious<cr>", mode = "n", desc = "Previous Tab", icon = "󰌥" },
     { "<leader>tc", "<cmd>tabnew<cr>", mode = "n", desc = "New Tab", icon = "󰝜" },
     { "<leader>tx", "<cmd>tabclose<cr>", mode = "n", desc = "Close Tab", icon = "󰭌" },
     { "<leader>to", "<cmd>tabonly<cr>", mode = "n", desc = "Only Tab", icon = "󰓪" },
     { "<leader>tm", "<cmd>tabmove<cr>", mode = "n", desc = "Move Tab", icon = "󰦦" },
+    { "t", group = "Tabs", icon = "󰓩" },
+    { "tn", "<cmd>tabNext<cr>", mode = "n", desc = "Next Tab", icon = "󰌒" },
+    { "tt", "<cmd>tabNext<cr>", mode = "n", desc = "Tab Next", icon = "󰌒" },
+    { "tp", "<cmd>tabprevious<cr>", mode = "n", desc = "Previous Tab", icon = "󰌥" },
+    { "tc", "<cmd>tabnew<cr>", mode = "n", desc = "New Tab", icon = "󰝜" },
+    { "tx", "<cmd>tabclose<cr>", mode = "n", desc = "Close Tab", icon = "󰭌" },
+    { "to", "<cmd>tabonly<cr>", mode = "n", desc = "Only Tab", icon = "󰓪" },
+    { "tm", "<cmd>tabmove<cr>", mode = "n", desc = "Move Tab", icon = "󰦦" },
 })
 vim.keymap.set('n', 'Q', '<nop>', { noremap = true, silent = true })
+vim.keymap.set('n', 't', '<nop>', { noremap = true, silent = true }) 
