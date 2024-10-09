@@ -44,8 +44,9 @@ wk.add({
     { "<leader>lcc", function() require("Comment.api").toggle.linewise.current() end, mode = "n", desc = "Toggle comment" },
     { "<leader>lcb", function() require("Comment.api").toggle.blockwise.current() end, mode = "n", desc = "Toggle block comment" },
     { "<leader>lcO", function() require("Comment.api").insert.linewise.above() end, mode = "n", desc = "Comment above" },
-    { "<leader>lco", function() require("Comment.api").insert.linewise.below() end, mode = "n", desc = "Comment below" },
+    { "<leader>lco", functio n() require("Comment.api").insert.linewise.below() end, mode = "n", desc = "Comment below" },
     { "<leader>lcA", function() require("Comment.api").insert.linewise.eol() end, mode = "n", desc = "Comment at end of line" },
     { "<leader>g", "<cmd>Neogit<cr>", mode = "n", desc = "Git", icon = "" },
+    { "<leader>t", "<cmd>tabNext<cr>", mode = "n", desc = "Next Tab", icon = "󰓩" },
 })
 vim.keymap.set('n', 'Q', '<nop>', { noremap = true, silent = true })
