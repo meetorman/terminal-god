@@ -30,9 +30,5 @@ end
 
 lazy.setup(load_plugins("plugins"))
 
-vim.api.nvim_create_autocmd("BufWritePost", {
-	pattern = { "*/nvim/*.lua" },
-	command = "source <afile> | DashboardReload",
-})
 
 
