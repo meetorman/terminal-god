@@ -65,6 +65,7 @@ wk.add({
     { "tm", "<cmd>tabmove<cr>", mode = "n", desc = "Move Tab", icon = "󰦦" },
     { "<leader>r", group = "Reporting", icon = "" },
     { "<leader>rn", "<cmd>Noice<cr>", mode = "n", desc = "Notifications", icon = "" },
+    { "<leader>rt", ":terminal<CR>", mode = "n", desc = "Terminal", icon = "" },
 })
 vim.keymap.set('n', 'Q', '<nop>', { noremap = true, silent = true })
 vim.keymap.set('n', 't', '<nop>', { noremap = true, silent = true }) 
