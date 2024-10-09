@@ -39,6 +39,7 @@ wk.add({
     { "<leader>li", vim.lsp.buf.implementation, mode = "n", desc = "Implementation", icon = "" },
     { "<leader>lr", vim.lsp.buf.references, mode = "n", desc = "References", icon = "" },
     { "<leader>lh", vim.lsp.buf.hover, mode = "n", desc = "Hover", icon = "" },
+    { "<leader>la", "<cmd>AerialToggle!<CR>", mode = "n", desc = "Aerial Map", icon=""},
     { "<leader>lc", group = "Comment", icon = "" },
     { "<leader>lcc", function() require("Comment.api").toggle.linewise.current() end, mode = "n", desc = "Toggle comment" },
     { "<leader>lcb", function() require("Comment.api").toggle.blockwise.current() end, mode = "n", desc = "Toggle block comment" },
