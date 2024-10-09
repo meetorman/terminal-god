@@ -151,5 +151,12 @@ return {
                 notify_recording("stopped", register)
             end,
         })
+
+        vim.api.nvim_create_user_command("Notify", function(opts)
+            vim.notify(opts.args, "info", {
+                title = "Custom Notification",
+                timeout = 2000,
+            })
+        end, { nargs = "+" })
     end
 }
